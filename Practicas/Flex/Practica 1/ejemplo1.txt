@@ -1,0 +1,11 @@
+// Diagrama de ejemplo
+// -------------------
+
+// Clases y sus relaciones
+[Customer] <>- orders*>[Order] ++-0..*> [LineItem]
+
+// Anotación
+[Order] -   [note: An annotation about Order class {bg:wheat}]
+
+// Más detalles en la clase: atributos y métodos
+[Customer|+forname: string;+surname: string;-password: string|login(user,pass)]
