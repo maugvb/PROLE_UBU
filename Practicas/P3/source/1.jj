@@ -36,7 +36,62 @@ TOKEN_MGR_DECLS : {}
 /* ALL */
 <*>TOKEN : {
     <"\n">
+    <#NUM: (["0"-"9"])+ >
+|   <#CHARAC: ["A"-"Z", "a"-"z"]>
+|   <#ID: (<CHARAC>)(<CHARAC>|<NUM>)* >
 }
 <*>SKIP : {
     <~[]>
 }
+
+
+void parse() : {} {
+    (sentences())*
+    <EOF>
+}
+
+void sentences() : {} {
+    sentences() sent()
+|   sent()
+}
+
+void sent() : {} {
+    assig() | proc()
+}
+
+
+void assig() : {} {
+    'COMPUTE' <ID> '=' exp()
+|   'MOVE' (<NUM> | <ID>) 'TO' <ID>
+}
+
+void proc() : {} {
+    'IF' exp() 'THEN' sentences() elseopt()
+|   'EVALUATE' <ID> (whenclause())+ 'END_EVALUATE'
+|   'PERFORM' 'UNTIL' exp() sentences() 'END_PERFORM'
+|   'DISPLAY' exp()
+    
+}
+
+void elseopt() : {} {
+    'ELSE' sentences() 'END-IF'
+|   'END-IF'
+}
+void whenclause() : {} {
+    'WHEN' exp() sentences()
+}
+void exp() : {} {
+    exp() '+' term()
+|   exp() '-' term()
+|   term()
+}
+void term() : {} {
+    term() '*' fac()
+|   term() '/' fac()
+|   fac()
+}
+void fac() : {} {
+    (<NUM>|<ID>|'('exp()')')
+}
+
+
