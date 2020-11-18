@@ -39,6 +39,27 @@ TOKEN : {
     <#NUM: (["0"-"9"])+ >
 |   <#CHARAC: ["A"-"Z", "a"-"z"]>
 |   <#ID: (<CHARAC>)(<CHARAC>|<NUM>)* >
+|   <COMPUTE:'COMPUTE'>
+|   <EQUAL:'='>
+|   <MOVE:'MOVE'>
+|   <TO:'TO'>
+|   <IF:'IF'>
+|   <THEN:'THEN'>
+|   <EVALUATE:'EVALUATE'>
+|   <END_EVALUATE:'END_EVALUATE'>
+|   <PERFORM:'PERFORM'>
+|   <UNTIL:'UNTIL'>
+|   <END_PERFORM:'END_PERFORM'>
+|   <DISPLAY:'DISPLAY'>
+|   <ELSE:'ELSE'>
+|   <END-IF:'END-IF'>
+|   <WHEN:'WHEN'>
+|   <ADDITION:'+'>
+|   <SUBSTRACTION:'-'>
+|   <MULTIPLICATION: "*">
+|   <DIVISION: "/">
+|   <PARENTHESIS_START: "(">
+|   <PARENTHESIS_END: ")">
 }
 SKIP : {
     <~[]>
@@ -52,7 +73,6 @@ void parse() : {} {
 
 void sentences() : {} {
     (sentences())? sent()
-/*|   sent()*/
 }
 
 void sent() : {} {
@@ -61,33 +81,33 @@ void sent() : {} {
 
 
 void assig() : {} {
-    'COMPUTE' <ID> '=' exp()
-|   'MOVE' (<NUM> | <ID>) 'TO' <ID>
+    <COMPUTE> <ID> <EQUAL> exp()
+|   <MOVE> (<NUM> | <ID>) <TO> <ID>
 }
 
 void proc() : {} {
-    'IF' exp() 'THEN' sentences() elseopt()
-|   'EVALUATE' <ID> (whenclause())+ 'END_EVALUATE'
-|   'PERFORM' 'UNTIL' exp() sentences() 'END_PERFORM'
-|   'DISPLAY' exp()
+    <IF> exp() <THEN> sentences() elseopt()
+|   <EVALUATE> <ID> (whenclause())+ <END_EVALUATE>
+|   <PERFORM> <UNTIL> exp() sentences() <END_PERFORM>
+|   <DISPLAY> exp()
     
 }
 
 void elseopt() : {} {
-    'ELSE' sentences() 'END-IF'
-|   'END-IF'
+    <ELSE> sentences() <END-IF>
+|   <END-IF>
 }
 void whenclause() : {} {
-    'WHEN' exp() sentences()
+    <WHEN> exp() sentences()
 }
 void exp() : {} {
-    ( ( '+' | '-' ) exp() '+' term() | term() )
+    ( (<ADDITION> | <SUBSTRACTION>) exp() term() | term() )
 }
 void term() : {} {
-    ( ('*'|'/') term() fac() | fac() )
+    ( (<MULTIPLICATION> | <DIVISION>) term() fac() | fac() )
 }
 void fac() : {} {
-    (<NUM>|<ID>|'('exp()')')
+    (<NUM>|<ID>| <PARENTHESIS_START>  exp() <PARENTHESIS_END> )
 }
 
 
