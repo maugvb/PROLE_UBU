@@ -1,32 +1,32 @@
 
 options {
-    BUILD_TOKEN_MANAGER=true;
-    DEBUG_TOKEN_MANAGER=false;
+    STATIC=false;
 }
 
 PARSER_BEGIN(Compilador)
+import java.util.Stack;
+st
+
 
 public class Compilador {
     public static void main(String args[]) throws java.io.FileNotFoundException {
-        final CompiladorTokenManager tokenManager = initTokenManager(args);
+        final CompiladorTokenManager tokenManager = initCompilador(args);
+        final Stack<String> stack = new Stack<String>();
 
         try {
             while (tokenManager.getNextToken().kind != EOF); // Process All tokens.
             System.out.println("Finished");
-        } catch (TokenMgrError ex) {
-            System.out.println("Token Manager caught an unexpected exception, exiting...");
-            throw ex;
+        } catch (ParseException ex) {
+            System.out.println("Parser caught an unexpected exception, exiting...");
+            return;
         }
     }
 
-    static CompiladorTokenManager initTokenManager(String args[]) throws java.io.FileNotFoundException {
-        final SimpleCharStream charStream;
+    static Compiler initCompilador(String args[]) throws java.io.FileNotFoundException {
         if (args.length < 1) {
-            charStream = new SimpleCharStream(System.in);
-        } else {
-            charStream = new SimpleCharStream(new java.io.FileInputStream(args[0]),0,0);
+            return new Compiler(System.in);
         }
-        return new CompiladorTokenManager(charStream);
+        return new Compiler(new java.io.FileInputStream(args[0]));
     }
 }
 PARSER_END(Compilador)
@@ -34,13 +34,13 @@ PARSER_END(Compilador)
 TOKEN_MGR_DECLS : {}
 
 /* ALL */
-<*>TOKEN : {
+TOKEN : {
     <"\n">
     <#NUM: (["0"-"9"])+ >
 |   <#CHARAC: ["A"-"Z", "a"-"z"]>
 |   <#ID: (<CHARAC>)(<CHARAC>|<NUM>)* >
 }
-<*>SKIP : {
+SKIP : {
     <~[]>
 }
 
@@ -51,8 +51,8 @@ void parse() : {} {
 }
 
 void sentences() : {} {
-    sentences() sent()
-|   sent()
+    (sentences())? sent()
+/*|   sent()*/
 }
 
 void sent() : {} {
@@ -81,14 +81,10 @@ void whenclause() : {} {
     'WHEN' exp() sentences()
 }
 void exp() : {} {
-    exp() '+' term()
-|   exp() '-' term()
-|   term()
+    ( ( '+' | '-' ) exp() '+' term() | term() )
 }
 void term() : {} {
-    term() '*' fac()
-|   term() '/' fac()
-|   fac()
+    ( ('*'|'/') term() fac() | fac() )
 }
 void fac() : {} {
     (<NUM>|<ID>|'('exp()')')
