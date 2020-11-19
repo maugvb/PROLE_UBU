@@ -4,29 +4,28 @@ options {
 }
 
 PARSER_BEGIN(Compilador)
-import java.util.Stack;
-st
 
 
 public class Compilador {
     public static void main(String args[]) throws java.io.FileNotFoundException {
-        final CompiladorTokenManager tokenManager = initCompilador(args);
-        final Stack<String> stack = new Stack<String>();
+        //final Stack<String> stack = new Stack<String>();
 
         try {
-            while (tokenManager.getNextToken().kind != EOF); // Process All tokens.
-            System.out.println("Finished");
+            final Compilador compilador = initCompilador(args);
+            compilador.parse();        
+        } catch (java.io.FileNotFoundException ex) {
+            System.out.println("File not found (" + args[0] + "), first argument must be a valid path.");
         } catch (ParseException ex) {
+            System.out.println(ex);
             System.out.println("Parser caught an unexpected exception, exiting...");
-            return;
         }
     }
 
-    static Compiler initCompilador(String args[]) throws java.io.FileNotFoundException {
+    static Compilador initCompilador(String args[]) throws java.io.FileNotFoundException {
         if (args.length < 1) {
-            return new Compiler(System.in);
+            return new Compilador(System.in);
         }
-        return new Compiler(new java.io.FileInputStream(args[0]));
+        return new Compilador(new java.io.FileInputStream(args[0]));
     }
 }
 PARSER_END(Compilador)
@@ -35,44 +34,44 @@ TOKEN_MGR_DECLS : {}
 
 /* ALL */
 TOKEN : {
-    <"\n">
-    <#NUM: (["0"-"9"])+ >
+    <NUM: (["0"-"9"])+ >
 |   <#CHARAC: ["A"-"Z", "a"-"z"]>
-|   <#ID: (<CHARAC>)(<CHARAC>|<NUM>)* >
-|   <COMPUTE:'COMPUTE'>
-|   <EQUAL:'='>
-|   <MOVE:'MOVE'>
-|   <TO:'TO'>
-|   <IF:'IF'>
-|   <THEN:'THEN'>
-|   <EVALUATE:'EVALUATE'>
-|   <END_EVALUATE:'END_EVALUATE'>
-|   <PERFORM:'PERFORM'>
-|   <UNTIL:'UNTIL'>
-|   <END_PERFORM:'END_PERFORM'>
-|   <DISPLAY:'DISPLAY'>
-|   <ELSE:'ELSE'>
-|   <END-IF:'END-IF'>
-|   <WHEN:'WHEN'>
-|   <ADDITION:'+'>
-|   <SUBSTRACTION:'-'>
+|   <COMPUTE:"COMPUTE">
+|   <EQUAL:"=">
+|   <MOVE:"MOVE">
+|   <TO:"TO">
+|   <IF:"IF">
+|   <THEN:"THEN">
+|   <EVALUATE:"EVALUATE">
+|   <END_EVALUATE:"END_EVALUATE">
+|   <PERFORM:"PERFORM">
+|   <UNTIL:"UNTIL">
+|   <END_PERFORM:"END_PERFORM">
+|   <DISPLAY:"DISPLAY">
+|   <ELSE:"ELSE">
+|   <END_IF:"END-IF">
+|   <WHEN:"WHEN">
+|   <ADDITION:"+">
+|   <SUBSTRACTION:"-">
 |   <MULTIPLICATION: "*">
 |   <DIVISION: "/">
 |   <PARENTHESIS_START: "(">
 |   <PARENTHESIS_END: ")">
+|   <ID: (<CHARAC>)(<CHARAC>|<NUM>)* >
+
 }
 SKIP : {
-    <~[]>
+     <~[]>
+|    <"**"(~["\n", "\r"])*>
 }
 
 
 void parse() : {} {
-    (sentences())*
-    <EOF>
+    sentences()
 }
 
 void sentences() : {} {
-    (sentences())? sent()
+    sent() (sentences())?
 }
 
 void sent() : {} {
@@ -81,33 +80,37 @@ void sent() : {} {
 
 
 void assig() : {} {
-    <COMPUTE> <ID> <EQUAL> exp()
+    <COMPUTE> <ID> <EQUAL> arithexp() <NUM>
 |   <MOVE> (<NUM> | <ID>) <TO> <ID>
 }
 
 void proc() : {} {
-    <IF> exp() <THEN> sentences() elseopt()
+    <IF> arithexp() <THEN> sentences() elseopt()
 |   <EVALUATE> <ID> (whenclause())+ <END_EVALUATE>
-|   <PERFORM> <UNTIL> exp() sentences() <END_PERFORM>
-|   <DISPLAY> exp()
+|   <PERFORM> <UNTIL> arithexp() sentences() <END_PERFORM>
+|   <DISPLAY> arithexp()
     
 }
 
 void elseopt() : {} {
-    <ELSE> sentences() <END-IF>
-|   <END-IF>
+    <ELSE> sentences() <END_IF>
+|   <END_IF>
 }
 void whenclause() : {} {
-    <WHEN> exp() sentences()
+    <WHEN> arithexp() sentences()
 }
-void exp() : {} {
-    ( (<ADDITION> | <SUBSTRACTION>) exp() term() | term() )
+void arithexp() : {} {
+    ( (<ADDITION> | <SUBSTRACTION>) arithexp() multexp() | multexp() )
 }
-void term() : {} {
-    ( (<MULTIPLICATION> | <DIVISION>) term() fac() | fac() )
+void multexp() : {} {
+    ( (<MULTIPLICATION> | <DIVISION>) multexp() fac() | fac() )
 }
-void fac() : {} {
-    (<NUM>|<ID>| <PARENTHESIS_START>  exp() <PARENTHESIS_END> )
+void fac() : {
+    Token token;
+} {
+    token = <NUM> { System.out.println("\tmete " + token.image); }
+|   token = <ID> { System.out.println("\tvalord " + token.image);  }
+|   <PARENTHESIS_START>  arithexp() <PARENTHESIS_END> 
 }
 
 

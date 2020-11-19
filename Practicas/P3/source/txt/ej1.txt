@@ -1,0 +1,15 @@
+MOVE 8 TO a           ** asignación a <- 8
+MOVE 3 TO b           ** asignación b <- 3
+
+PERFORM UNTIL a       ** mientras a sea distinto que 0 seguir el bucle
+    COMPUTE a = a - 1 ** decrementar a--
+	DISPLAY a         ** imprimir el valor de a
+	IF b - 4          ** imprimir 2*a si b - 4 != 0
+		DISPLAY 2*a
+	ELSE			  ** imprimir a/2 si b - 4 == 0
+		DISPLAY a / 2
+	END-IF
+END-PERFORM
+
+DISPLAY (a)           ** imprimir a
+DISPLAY (a+b)         ** imprimir a+b
