@@ -81,15 +81,20 @@ void sent() : {} {
 
 void assig() : {} {
     <COMPUTE> <ID> <EQUAL> arithexp()
-|   <MOVE> (<NUM> | <ID>) <TO> <ID>
+    //Fix below line
+|   <MOVE> fac() <TO> fac()
 }
 
 void proc() : {} {
     <IF> arithexp() sentences() elseopt()
 |   <EVALUATE> <ID> (whenclause())+ <END_EVALUATE>
 |   <PERFORM> <UNTIL> arithexp() sentences() <END_PERFORM>
-|   <DISPLAY> arithexp()
+|   display() arithexp()
     
+}
+
+void display() : {} {
+    <DISPLAY> {System.out.println("\tprint");}
 }
 
 void elseopt() : {} {
