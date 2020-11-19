@@ -43,10 +43,10 @@ TOKEN : {
 |   <IF:"IF">
 |   <THEN:"THEN">
 |   <EVALUATE:"EVALUATE">
-|   <END_EVALUATE:"END_EVALUATE">
+|   <END_EVALUATE:"END-EVALUATE">
 |   <PERFORM:"PERFORM">
 |   <UNTIL:"UNTIL">
-|   <END_PERFORM:"END_PERFORM">
+|   <END_PERFORM:"END-PERFORM">
 |   <DISPLAY:"DISPLAY">
 |   <ELSE:"ELSE">
 |   <END_IF:"END-IF">
@@ -80,12 +80,12 @@ void sent() : {} {
 
 
 void assig() : {} {
-    <COMPUTE> <ID> <EQUAL> arithexp() <NUM>
+    <COMPUTE> <ID> <EQUAL> arithexp()
 |   <MOVE> (<NUM> | <ID>) <TO> <ID>
 }
 
 void proc() : {} {
-    <IF> arithexp() <THEN> sentences() elseopt()
+    <IF> arithexp() sentences() elseopt()
 |   <EVALUATE> <ID> (whenclause())+ <END_EVALUATE>
 |   <PERFORM> <UNTIL> arithexp() sentences() <END_PERFORM>
 |   <DISPLAY> arithexp()
@@ -100,10 +100,32 @@ void whenclause() : {} {
     <WHEN> arithexp() sentences()
 }
 void arithexp() : {} {
-    ( (<ADDITION> | <SUBSTRACTION>) arithexp() multexp() | multexp() )
+    multexp() (operation())?
 }
-void multexp() : {} {
+/*void multexp() : {} {
     ( (<MULTIPLICATION> | <DIVISION>) multexp() fac() | fac() )
+}*/
+
+void multexp(): {} {
+    fac() (operation2())?
+}
+
+void operation(): {
+    String op;
+} {
+   ( <ADDITION> { op = "sum";}
+|   <SUBSTRACTION> {op="sub";})
+
+    arithexp() { System.out.println('\t' + op); }
+}
+
+void operation2(): {
+    String op;
+} {
+   ( <MULTIPLICATION> { op = "mul";}
+|   <DIVISION> {op="div";})
+
+    multexp() { System.out.println('\t' + op); }
 }
 void fac() : {
     Token token;
