@@ -80,23 +80,26 @@ void sent() : {} {
 }
 
 
-void assig() : {} {
-    <COMPUTE> <ID> <EQUAL> arithexp()
+void assig() : {
+    Token id, num;
+} {
+    (<COMPUTE> id=<ID>{System.out.println("\tvalori "+id.image);} <EQUAL> arithexp()
     //Fix below line
-|   <MOVE> /*fac()*/<ID> <TO> <NUM>//fac()
+|   <MOVE> /*fac()*/num=<NUM> <TO> id=<ID>{
+        System.out.println("\tvalori "+id.image);
+        System.out.println("\tmete "+num.image);}) {
+            System.out.println("\tasigna");
+        }//fac()
 }
 
 void proc() : {} {
     <IF> arithexp() sentences() elseopt()
 |   <EVALUATE> <ID> (whenclause())+ <END_EVALUATE>
 |   <PERFORM> <UNTIL> arithexp() sentences() <END_PERFORM>
-|   display() arithexp()
+|    <DISPLAY> arithexp() { System.out.println("\tprint"); }
     
 }
 
-void display() : {} {
-    <DISPLAY> { System.out.println("\tprint"); }
-}
 
 void elseopt() : {} {
     <ELSE> sentences() <END_IF>
