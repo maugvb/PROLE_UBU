@@ -71,7 +71,8 @@ void parse() : {} {
 }
 
 void sentences() : {} {
-    sent() (sentences())?
+    //Recursividad de izquierdas
+     sent() (sentences())?
 }
 
 void sent() : {} {
@@ -82,7 +83,7 @@ void sent() : {} {
 void assig() : {} {
     <COMPUTE> <ID> <EQUAL> arithexp()
     //Fix below line
-|   <MOVE> fac() <TO> fac()
+|   <MOVE> /*fac()*/<ID> <TO> <NUM>//fac()
 }
 
 void proc() : {} {
@@ -94,7 +95,7 @@ void proc() : {} {
 }
 
 void display() : {} {
-    <DISPLAY> {System.out.println("\tprint");}
+    <DISPLAY> { System.out.println("\tprint"); }
 }
 
 void elseopt() : {} {
@@ -105,32 +106,36 @@ void whenclause() : {} {
     <WHEN> arithexp() sentences()
 }
 void arithexp() : {} {
-    multexp() (operation())?
+    //Recursividad de izquierdas
+    multexp() arithexpP()
 }
 /*void multexp() : {} {
     ( (<MULTIPLICATION> | <DIVISION>) multexp() fac() | fac() )
 }*/
 
+
+
+void arithexpP(): {
+    String op;
+} {
+  ( ( <ADDITION> multexp() arithexpP(){ op = "sum";}
+|   <SUBSTRACTION> multexp() arithexpP() {op="sub";}) {System.out.println('\t' + op);})?
+
+
+}
+
 void multexp(): {} {
-    fac() (operation2())?
+    //Recursividad de izquierdas
+    fac() multexpP()
 }
 
-void operation(): {
+
+void multexpP(): {
     String op;
 } {
-   ( <ADDITION> { op = "sum";}
-|   <SUBSTRACTION> {op="sub";})
+   (( <MULTIPLICATION> fac() multexpP() { op = "mul";}
+|   <DIVISION> fac() multexpP() {op="div";}) {System.out.println('\t' + op);})?
 
-    arithexp() { System.out.println('\t' + op); }
-}
-
-void operation2(): {
-    String op;
-} {
-   ( <MULTIPLICATION> { op = "mul";}
-|   <DIVISION> {op="div";})
-
-    multexp() { System.out.println('\t' + op); }
 }
 void fac() : {
     Token token;
