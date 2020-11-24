@@ -27,6 +27,18 @@ public class Compilador {
         }
         return new Compilador(new java.io.FileInputStream(args[0]));
     }
+
+
+    public static int labelCount = 0;
+    public static int getLabel() {
+        return Compilador.labelCount-1;
+    }
+    public static int getNewLabel() {
+        return Compilador.labelCount++;
+    }
+
+    
+
 }
 PARSER_END(Compilador)
 
@@ -75,35 +87,36 @@ void sentences() : {} {
      sent() (sentences())?
 }
 
-void sent() : {} {
-    assig() | proc()
+void sent() : {int label;} {
+    assig()| proc()
 }
 
 
 void assig() : {
     Token id, num;
+    int label;
 } {
-    (<COMPUTE> id=<ID>{System.out.println("\tvalori "+id.image);} <EQUAL> arithexp()
+    (<COMPUTE> id=<ID>{ label = getNewLabel(); System.out.println("\tsiciertovea LBL"+label); System.out.println("\tvalori "+id.image);} <EQUAL> arithexp() 
     //Fix below line
 |   <MOVE> /*fac()*/num=<NUM> <TO> id=<ID>{
         System.out.println("\tvalori "+id.image);
         System.out.println("\tmete "+num.image);}) {
-            System.out.println("\tasigna");
+        System.out.println("\tasigna");
         }//fac()
 }
 
-void proc() : {} {
-    <IF> arithexp() sentences() elseopt()
+void proc() : { int label, prevLabel, auxLabel; } {
+    {prevLabel=getLabel();}<IF>   arithexp(){  label = getNewLabel(); System.out.println("\tsifalsoveo LBL"+label);}  sentences() auxLabel=elseopt(label){System.out.println("LBL"+auxLabel);}//LBL1
 |   <EVALUATE> <ID> (whenclause())+ <END_EVALUATE>
-|   <PERFORM> <UNTIL> arithexp() sentences() <END_PERFORM>
-|    <DISPLAY> arithexp() { System.out.println("\tprint"); }
+|   <PERFORM> { label = getNewLabel(); System.out.println("LBL"+label);} <UNTIL> arithexp() sentences() {System.out.println("\tvea LBL"+label);System.out.println("LBL"+(label+1));}<END_PERFORM>//Vea LBL0
+|   <DISPLAY> arithexp() { System.out.println("\tprint"); }
     
 }
 
 
-void elseopt() : {} {
-    <ELSE> sentences() <END_IF>
-|   <END_IF>
+int elseopt(int prevLabel) : {int label;} {
+    <ELSE> { label = getNewLabel(); System.out.println("\tvea LBL"+label);System.out.println("LBL"+prevLabel);} sentences() <END_IF>{return label;}
+|   <END_IF>{label = getNewLabel(); return label;}
 }
 void whenclause() : {} {
     <WHEN> arithexp() sentences()
