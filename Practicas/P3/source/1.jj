@@ -93,23 +93,72 @@ void sent() : {int label;} {
 
 
 void assig() : {
-    Token id, num;
+    Token id, num=null, id2=null;
     int label;
 } {
-    (<COMPUTE> id=<ID>{ label = getNewLabel(); System.out.println("\tsiciertovea LBL"+label); System.out.println("\tvalori "+id.image);} <EQUAL> arithexp() 
+    (<COMPUTE> id=<ID>{  System.out.println("\tvalori "+id.image);} <EQUAL> arithexp() 
     //Fix below line
-|   <MOVE> /*fac()*/num=<NUM> <TO> id=<ID>{
+|   <MOVE> /*fac()*/(num=<NUM>|id2=<ID>) <TO> id=<ID>{
         System.out.println("\tvalori "+id.image);
-        System.out.println("\tmete "+num.image);}) {
+        if(num!=null){
+            System.out.println("\tmete "+num.image);
+        }else{
+            System.out.println("\tvalord "+id2.image);
+        }}) {
         System.out.println("\tasigna");
         }//fac()
 }
 
-void proc() : { int label, prevLabel, auxLabel; } {
-    {prevLabel=getLabel();}<IF>   arithexp(){  label = getNewLabel(); System.out.println("\tsifalsoveo LBL"+label);}  sentences() auxLabel=elseopt(label){System.out.println("LBL"+auxLabel);}//LBL1
-|   <EVALUATE> <ID> (whenclause())+ <END_EVALUATE>
-|   <PERFORM> { label = getNewLabel(); System.out.println("LBL"+label);} <UNTIL> arithexp() sentences() {System.out.println("\tvea LBL"+label);System.out.println("LBL"+(label+1));}<END_PERFORM>//Vea LBL0
-|   <DISPLAY> arithexp() { System.out.println("\tprint"); }
+void proc() : { int label, prevLabel, auxLabel, labelInicial; Token id;} {
+    {prevLabel=getLabel();}
+        <IF>   
+        arithexp(){  
+            label = getNewLabel(); 
+            System.out.println("\tsifalsovea LBL"+label);
+        }  
+        sentences() 
+        auxLabel=elseopt(label){
+            System.out.println("LBL"+(auxLabel));
+        }//LBL1
+|   
+
+    <EVALUATE> {
+        labelInicial = getNewLabel();
+    }
+    id=<ID> {
+    }
+    ({
+        System.out.println("\tvalord "+id.image);
+    }(whenclause(labelInicial){
+        label = getLabel();
+        System.out.println("LBL"+label);
+    })+){
+        System.out.println("LBL"+labelInicial);
+
+    } 
+    <END_EVALUATE>{
+
+    }
+|   
+
+    <PERFORM> { 
+        label = getNewLabel(); System.out.println("LBL"+label);
+    } 
+    <UNTIL> 
+    arithexp(){
+        label = getNewLabel(); System.out.println("\tsiciertovea LBL"+label);
+    } 
+    sentences() {
+        System.out.println("\tvea LBL"+(label-1));
+        System.out.println("LBL"+(label));
+    }
+    <END_PERFORM>//Vea LBL0
+|   
+
+    <DISPLAY> 
+    arithexp() { 
+        System.out.println("\tprint"); 
+    }
     
 }
 
@@ -118,8 +167,19 @@ int elseopt(int prevLabel) : {int label;} {
     <ELSE> { label = getNewLabel(); System.out.println("\tvea LBL"+label);System.out.println("LBL"+prevLabel);} sentences() <END_IF>{return label;}
 |   <END_IF>{label = getNewLabel(); return label;}
 }
-void whenclause() : {} {
-    <WHEN> arithexp() sentences()
+void whenclause(int labelInicial) : {int label;} {
+    <WHEN>
+     
+    arithexp(){
+        System.out.println("\tsub");
+        label = getNewLabel();
+        System.out.println("\tsifalsevea LBL"+label);
+
+    }
+    
+    sentences(){         
+        System.out.println("\tvea LBL"+labelInicial);
+    }
 }
 void arithexp() : {} {
     //Recursividad de izquierdas
@@ -134,8 +194,8 @@ void arithexp() : {} {
 void arithexpP(): {
     String op;
 } {
-  ( ( <ADDITION> multexp() arithexpP(){ op = "sum";}
-|   <SUBSTRACTION> multexp() arithexpP() {op="sub";}) {System.out.println('\t' + op);})?
+  ( ( <ADDITION> multexp(){System.out.println('\t'+"sum");} arithexpP()
+|   <SUBSTRACTION> multexp(){System.out.println('\t'+"sub");} arithexpP() ))?
 
 
 }
@@ -149,8 +209,8 @@ void multexp(): {} {
 void multexpP(): {
     String op;
 } {
-   (( <MULTIPLICATION> fac() multexpP() { op = "mul";}
-|   <DIVISION> fac() multexpP() {op="div";}) {System.out.println('\t' + op);})?
+   (( <MULTIPLICATION> fac() { System.out.println('\t'+"mul"); } multexpP() { }
+|   <DIVISION> fac(){System.out.println('\t'+"div");} multexpP()))?
 
 }
 void fac() : {
