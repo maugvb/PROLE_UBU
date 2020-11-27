@@ -194,8 +194,17 @@ void proc() : { int label, prevLabel, auxLabel, labelInicial; Token id;} {
  * - END-IF
  */
 int elseopt(int prevLabel) : {int label;} {
-    <ELSE> { label = getNewLabel(); System.out.println("\tvea LBL"+label);System.out.println("LBL"+prevLabel);} sentences() <END_IF>{return label;}
-|   <END_IF>{label = getNewLabel(); return label;}
+    <ELSE> { 
+        label = getNewLabel(); 
+        System.out.println("\tvea LBL"+label);
+        System.out.println("LBL"+prevLabel);
+    } sentences() <END_IF>{
+                            return label;
+                        }
+|   <END_IF>{
+    label = getNewLabel(); 
+    return label;
+    }
 }
 
 
@@ -232,8 +241,12 @@ void arithexp() : {} {
 void arithexpP(): {
     String op;
 } {
-  ( ( <ADDITION> multexp(){System.out.println('\t'+"sum");} arithexpP()
-|   <SUBSTRACTION> multexp(){System.out.println('\t'+"sub");} arithexpP() ))?
+  ( ( <ADDITION> multexp(){
+        System.out.println('\t'+"sum");
+      } arithexpP()
+|   <SUBSTRACTION> multexp(){
+        System.out.println('\t'+"sub");
+      } arithexpP() ))?
 }
 /**
  * Solucion de recursividad de izquierdas para expresiones multiplicacion y division.
@@ -249,8 +262,12 @@ void multexp(): {} {
 void multexpP(): {
     String op;
 } {
-   (( <MULTIPLICATION> fac() { System.out.println('\t'+"mul"); } multexpP() { }
-|   <DIVISION> fac(){System.out.println('\t'+"div");} multexpP()))?
+   (( <MULTIPLICATION> fac() { 
+       System.out.println('\t'+"mul"); 
+      } multexpP() 
+|   <DIVISION> fac(){
+       System.out.println('\t'+"div");
+      } multexpP()))?
 
 }
 
@@ -264,8 +281,12 @@ void multexpP(): {
 void fac() : {
     Token token;
 } {
-    token = <NUM> { System.out.println("\tmete " + token.image); }
-|   token = <ID> { System.out.println("\tvalord " + token.image);  }
+    token = <NUM> { 
+        System.out.println("\tmete " + token.image); 
+    }
+|   token = <ID> { 
+        System.out.println("\tvalord " + token.image);  
+    }
 |   <PARENTHESIS_START>  arithexp() <PARENTHESIS_END> 
 }
 
