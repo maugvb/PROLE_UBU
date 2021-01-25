@@ -221,12 +221,11 @@ int main(){
         }
     }
 
-    printf("La clase con el mayor número de atributos es %s, con %d atributos.\n", classes[posMayorAttr], mayorAttr);
-    printf("La clase con el mayor número de metodos es %s, con %d metodos.\n", classes[posMayorMet], mayorMet);
+    printf("La clase con el mayor número de atributos es '%s', con %d atributos.\n", classes[posMayorAttr], mayorAttr);
     
-    
+    printf("El método con más argumentos es '%s' de la clase '%s'\n",maxMethod, classMaxMethod);
+
     printf("El número de notas es %d.\n", notes);
-    printf("El método con más argumentos es %s de la clase %s",maxMethod, classMaxMethod);
     
 
 }
