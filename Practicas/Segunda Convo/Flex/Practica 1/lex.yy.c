@@ -360,8 +360,8 @@ static void yy_fatal_error (yyconst char msg[]  );
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
 
-#define YY_NUM_RULES 17
-#define YY_END_OF_BUFFER 18
+#define YY_NUM_RULES 26
+#define YY_END_OF_BUFFER 27
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -369,15 +369,16 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static yyconst flex_int16_t yy_accept[66] =
+static yyconst flex_int16_t yy_accept[81] =
     {   0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,   18,   16,   17,   16,   15,   16,    3,   16,
-       14,    8,    4,   17,   17,   17,    7,    5,   17,   17,
-       17,    6,    9,   13,   10,    0,   15,    0,   15,    1,
-        0,    0,   14,    0,    0,   11,    0,    0,    0,   12,
-        0,   13,    1,    0,    0,   11,    0,    0,    0,    0,
-        0,    2,   15,   15,    0
+        0,    0,    0,    0,   27,   25,   26,   25,   24,   25,
+        3,   25,   23,   26,   11,    4,   26,   26,   26,   10,
+        6,   18,    5,   18,   17,   18,   15,    9,   12,   20,
+       21,   26,   13,   22,   26,    0,   24,    0,   24,    1,
+        0,    0,   23,    7,    0,    0,   14,    0,    0,   17,
+        0,   16,   21,   19,   22,    0,    1,    0,    0,   14,
+        0,    8,    0,    0,    0,    0,    2,   24,   24,    0
     } ;
 
 static yyconst flex_int32_t yy_ec[256] =
@@ -386,16 +387,16 @@ static yyconst flex_int32_t yy_ec[256] =
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    3,    1,    1,    1,    1,    1,    1,    1,    4,
-        5,    6,    7,    1,    8,    9,   10,   11,   11,   12,
-       12,   12,   12,   12,   12,   12,   12,   13,    1,   14,
-        1,   15,    1,    1,   12,   12,   12,   12,   12,   12,
-       12,   12,   12,   12,   12,   12,   12,   12,   12,   12,
-       12,   12,   12,   12,   12,   12,   12,   12,   12,   12,
-       16,    1,   17,   18,    1,    1,   12,   12,   12,   19,
+        5,    6,    7,    8,    9,   10,   11,   12,   12,   13,
+       13,   13,   13,   13,   13,   13,   13,   14,   15,   16,
+        1,   17,    1,    1,   13,   13,   13,   13,   13,   13,
+       13,   13,   13,   13,   13,   13,   13,   13,   13,   13,
+       13,   13,   13,   13,   13,   13,   13,   13,   13,   13,
+       18,    1,   19,   20,   21,    1,   13,   13,   13,   22,
 
-       20,   12,   12,   12,   12,   12,   12,   12,   12,   21,
-       22,   12,   12,   23,   24,   25,   12,   12,   12,   12,
-       12,   12,    1,   26,    1,    1,    1,    1,    1,    1,
+       23,   13,   13,   13,   13,   13,   13,   13,   13,   24,
+       25,   13,   13,   26,   27,   28,   13,   13,   13,   13,
+       13,   13,    1,   29,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -412,89 +413,101 @@ static yyconst flex_int32_t yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static yyconst flex_int32_t yy_meta[27] =
+static yyconst flex_int32_t yy_meta[30] =
     {   0,
-        1,    2,    1,    1,    1,    1,    3,    3,    1,    1,
-        4,    4,    3,    1,    1,    1,    1,    1,    4,    4,
-        4,    4,    4,    4,    4,    1
+        1,    2,    3,    1,    1,    1,    4,    1,    4,    1,
+        1,    5,    5,    4,    1,    1,    1,    1,    1,    1,
+        4,    5,    5,    5,    5,    5,    5,    5,    1
     } ;
 
-static yyconst flex_int16_t yy_base[73] =
+static yyconst flex_int16_t yy_base[91] =
     {   0,
-        0,    0,   26,    0,   52,    0,   78,    0,  100,    0,
-      122,    0,  177,  178,  178,  145,  173,  165,  153,  148,
-        0,  178,  178,    0,  100,  163,  178,  178,    0,  161,
-      161,  178,  178,    0,  178,  140,  158,  135,  135,    0,
-      133,  131,    0,  102,    0,    0,  146,    0,  136,  178,
-        0,    0,    0,  113,  117,    0,    0,  116,  112,  119,
-      107,  178,  127,  126,  178,  124,  114,  165,  112,  110,
-      169,  102
+        0,    0,   29,    0,   58,    0,   87,    0,  116,    0,
+      134,    0,  152,    0,  227,  228,  228,  178,  223,  214,
+      197,  192,    0,  197,  228,  228,    0,  190,  209,  228,
+      228,  228,  228,    0,    0,  207,  228,  228,  228,  228,
+        0,    0,  228,    0,  192,  183,  203,  179,  176,    0,
+      171,  171,    0,  228,  193,    0,    0,  189,    0,    0,
+        0,  188,    0,    0,    0,  174,    0,  158,  160,    0,
+        0,  228,  159,  147,  158,  143,  228,  165,  164,  228,
+      161,  150,  211,  149,  214,  147,  146,  144,  219,  143
     } ;
 
-static yyconst flex_int16_t yy_def[73] =
+static yyconst flex_int16_t yy_def[91] =
     {   0,
-       65,    1,   65,    3,   65,    5,   65,    7,    3,    9,
-        9,   11,   65,   65,   65,   65,   16,   65,   65,   65,
-       66,   65,   65,   67,   68,   67,   65,   65,   69,   69,
-       69,   65,   65,   70,   65,   65,   16,   65,   65,   71,
-       65,   65,   66,   68,   72,   44,   72,   67,   69,   65,
-       69,   70,   71,   65,   65,   72,   72,   65,   65,   65,
-       65,   65,   16,   16,    0,   65,   65,   65,   65,   65,
-       65,   65
+       80,    1,   80,    3,   80,    5,   80,    7,   80,    9,
+        3,   11,   11,   13,   80,   80,   80,   80,   18,   80,
+       80,   80,   81,   80,   80,   80,   82,   83,   82,   80,
+       80,   80,   80,   84,   84,   85,   80,   80,   80,   80,
+       86,   87,   80,   88,   80,   80,   18,   80,   80,   89,
+       80,   80,   81,   80,   83,   90,   55,   90,   82,   84,
+       84,   85,   86,   87,   88,   80,   89,   80,   80,   90,
+       90,   80,   80,   80,   80,   80,   80,   18,   18,    0,
+       80,   80,   80,   80,   80,   80,   80,   80,   80,   80
     } ;
 
-static yyconst flex_int16_t yy_nxt[205] =
+static yyconst flex_int16_t yy_nxt[258] =
     {   0,
-       14,   15,   16,   14,   14,   17,   17,   17,   17,   18,
-       17,   14,   14,   17,   17,   19,   14,   17,   14,   14,
-       14,   20,   14,   14,   14,   14,   15,   15,   15,   15,
-       15,   15,   15,   15,   15,   15,   21,   21,   15,   15,
-       15,   15,   22,   15,   21,   21,   21,   21,   21,   21,
-       21,   23,   15,   15,   15,   15,   15,   15,   24,   24,
-       15,   15,   25,   25,   26,   15,   15,   15,   27,   15,
-       25,   25,   25,   25,   25,   25,   25,   28,   15,   15,
-       15,   15,   15,   15,   29,   29,   15,   15,   30,   30,
-       31,   15,   15,   15,   32,   15,   30,   30,   30,   30,
+       16,   17,   18,   16,   16,   19,   19,   16,   19,   19,
+       20,   19,   16,   16,   16,   19,   19,   21,   16,   19,
+       16,   16,   16,   16,   22,   16,   16,   16,   16,   17,
+       17,   17,   17,   17,   17,   17,   17,   17,   17,   17,
+       23,   23,   17,   17,   24,   17,   17,   25,   17,   17,
+       23,   23,   23,   23,   23,   23,   23,   26,   17,   17,
+       17,   17,   17,   17,   27,   17,   27,   17,   17,   28,
+       28,   29,   17,   17,   17,   17,   30,   17,   27,   28,
+       28,   28,   28,   28,   28,   28,   31,   32,   17,   32,
+       33,   32,   32,   34,   32,   34,   32,   32,   35,   35,
 
-       30,   30,   30,   15,   33,   56,   45,   45,   45,   45,
-       34,   34,   47,   52,   47,   49,   15,   44,   34,   34,
-       34,   34,   34,   34,   34,   15,   15,   43,   39,   64,
-       63,   62,   15,   15,   61,   60,   59,   58,   35,   50,
-       15,   15,   15,   15,   15,   15,   15,   36,   57,   55,
-       37,   37,   37,   37,   54,   37,   38,   42,   37,   37,
-       39,   38,   37,   51,   50,   48,   38,   46,   46,   53,
-       42,   53,   53,   41,   40,   39,   65,   13,   65,   65,
-       65,   65,   65,   65,   65,   65,   65,   65,   65,   65,
-       65,   65,   65,   65,   65,   65,   65,   65,   65,   65,
+       36,   37,   32,   32,   32,   38,   32,   34,   35,   35,
+       35,   35,   35,   35,   35,   32,   17,   17,   17,   17,
+       39,   17,   17,   40,   17,   17,   17,   41,   41,   42,
+       17,   17,   17,   17,   17,   17,   17,   41,   41,   41,
+       41,   41,   41,   41,   17,   17,   17,   70,   65,   17,
+       64,   63,   43,   60,   55,   17,   17,   17,   17,   17,
+       17,   17,   17,   44,   44,   53,   49,   79,   45,   78,
+       17,   77,   76,   44,   44,   44,   44,   44,   44,   44,
+       46,   75,   74,   47,   47,   73,   47,   47,   72,   47,
+       80,   71,   69,   47,   47,   68,   56,   47,   56,   56,
 
-       65,   65,   65,   65
+       48,   56,   48,   58,   52,   49,   58,   48,   66,   61,
+       56,   59,   54,   56,   57,   57,   62,   52,   62,   67,
+       51,   67,   67,   67,   50,   49,   80,   15,   80,   80,
+       80,   80,   80,   80,   80,   80,   80,   80,   80,   80,
+       80,   80,   80,   80,   80,   80,   80,   80,   80,   80,
+       80,   80,   80,   80,   80,   80,   80
     } ;
 
-static yyconst flex_int16_t yy_chk[205] =
+static yyconst flex_int16_t yy_chk[258] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    3,    3,    3,    3,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    3,
         3,    3,    3,    3,    3,    3,    3,    3,    3,    3,
         3,    3,    3,    3,    3,    3,    3,    3,    3,    3,
-        3,    3,    5,    5,    5,    5,    5,    5,    5,    5,
+        3,    3,    3,    3,    3,    3,    3,    3,    5,    5,
         5,    5,    5,    5,    5,    5,    5,    5,    5,    5,
-        5,    5,    5,    5,    5,    5,    5,    5,    7,    7,
-        7,    7,    7,    7,    7,    7,    7,    7,    7,    7,
+        5,    5,    5,    5,    5,    5,    5,    5,    5,    5,
+        5,    5,    5,    5,    5,    5,    5,    7,    7,    7,
         7,    7,    7,    7,    7,    7,    7,    7,    7,    7,
 
-        7,    7,    7,    7,    9,   72,   25,   25,   44,   44,
-        9,    9,   25,   70,   44,   69,    9,   67,    9,    9,
-        9,    9,    9,    9,    9,    9,   11,   66,   64,   63,
-       61,   60,   11,   11,   59,   58,   55,   54,   11,   49,
-       11,   11,   11,   11,   11,   11,   11,   16,   47,   42,
-       16,   16,   16,   16,   41,   16,   39,   38,   16,   16,
-       37,   36,   16,   31,   30,   26,   16,   68,   68,   71,
-       20,   71,   71,   19,   18,   17,   13,   65,   65,   65,
-       65,   65,   65,   65,   65,   65,   65,   65,   65,   65,
-       65,   65,   65,   65,   65,   65,   65,   65,   65,   65,
+        7,    7,    7,    7,    7,    7,    7,    7,    7,    7,
+        7,    7,    7,    7,    7,    7,    9,    9,    9,    9,
+        9,    9,    9,    9,    9,    9,    9,    9,    9,    9,
+        9,    9,    9,    9,    9,    9,    9,    9,    9,    9,
+        9,    9,    9,    9,    9,   11,   11,   90,   88,   11,
+       87,   86,   11,   84,   82,   11,   11,   11,   11,   11,
+       11,   11,   11,   13,   13,   81,   79,   78,   13,   76,
+       13,   75,   74,   13,   13,   13,   13,   13,   13,   13,
+       18,   73,   69,   18,   18,   68,   18,   18,   66,   18,
+       62,   58,   52,   18,   18,   51,   28,   18,   28,   55,
 
-       65,   65,   65,   65
+       49,   55,   18,   28,   48,   47,   55,   46,   45,   36,
+       28,   29,   24,   55,   83,   83,   85,   22,   85,   89,
+       21,   89,   89,   89,   20,   19,   15,   80,   80,   80,
+       80,   80,   80,   80,   80,   80,   80,   80,   80,   80,
+       80,   80,   80,   80,   80,   80,   80,   80,   80,   80,
+       80,   80,   80,   80,   80,   80,   80
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -519,15 +532,15 @@ char *yytext;
 #line 8 "1.l"
 
 
-char classes[50][50], auxClass[50], claseAnterior[50];
-int attr[50], met[50], numClasses = 0, numRels = 0;
+char classes[50][50], auxClass[50], claseAnterior[50], maxMethod[50], auxMaxMethod[50], classMaxMethod[50], actualClass[50], estereotipoAnterior[50], estereotipos[50][50];
+int attr[50], met[50], par[50], numClasses = 0, numRels = 0, numEster=0, notes=0, numPar=0, numParAux=0, numMet=0, numMetAux=0;
 int auxRep = 0, indexAux =0, mayorAttr, mayorMet;
 int posMayorAttr = 0, posMayorMet=0;
 
 
 
 /*Reglas*/
-#line 531 "lex.yy.c"
+#line 544 "lex.yy.c"
 
 #define INITIAL 0
 #define CLASS 1
@@ -535,6 +548,7 @@ int posMayorAttr = 0, posMayorMet=0;
 #define METHODS 3
 #define PAR 4
 #define NOTE 5
+#define ESTEROTIPOS 6
 
 #ifndef YY_NO_UNISTD_H
 /* Special case for "unistd.h", since it is non-ANSI. We include it way
@@ -718,7 +732,7 @@ YY_DECL
 
 
 
-#line 722 "lex.yy.c"
+#line 736 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -771,13 +785,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 66 )
+				if ( yy_current_state >= 81 )
 					yy_c = yy_meta[(unsigned int) yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 178 );
+		while ( yy_base[yy_current_state] != 228 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -809,51 +823,78 @@ YY_RULE_SETUP
 case 2:
 YY_RULE_SETUP
 #line 31 "1.l"
-BEGIN(NOTE);
+{   notes++;
+                BEGIN(NOTE);}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 32 "1.l"
+#line 33 "1.l"
 BEGIN(CLASS);
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 33 "1.l"
+#line 35 "1.l"
 BEGIN(MEMBERS);
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 34 "1.l"
-BEGIN(METHODS);
+#line 36 "1.l"
+BEGIN(PAR);
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 36 "1.l"
-BEGIN(INITIAL);
+#line 37 "1.l"
+BEGIN(METHODS);
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 37 "1.l"
-BEGIN(INITIAL);
+#line 38 "1.l"
+BEGIN(ESTEROTIPOS);
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 38 "1.l"
-BEGIN(INITIAL);
+#line 40 "1.l"
+BEGIN(CLASS); 
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 39 "1.l"
-BEGIN(METHODS);
+#line 41 "1.l"
+BEGIN(INITIAL);
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 40 "1.l"
+#line 42 "1.l"
 BEGIN(INITIAL);
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 45 "1.l"
+#line 43 "1.l"
+BEGIN(INITIAL);
+	YY_BREAK
+case 12:
+YY_RULE_SETUP
+#line 44 "1.l"
+{                    printf(" CLASE EN METODO %s %d", classes[numClasses], numClasses);
+
+
+                if(numPar<numParAux){
+                    strcpy(maxMethod, auxMaxMethod);
+                    numPar=numParAux;
+                    strcpy(classMaxMethod,actualClass);
+                }
+                numParAux=0;
+                BEGIN(METHODS);
+                
+            }
+	YY_BREAK
+case 13:
+YY_RULE_SETUP
+#line 56 "1.l"
+BEGIN(INITIAL);
+	YY_BREAK
+case 14:
+YY_RULE_SETUP
+#line 65 "1.l"
 {
 
     for(int i =0;i<numClasses;i++){
@@ -866,10 +907,38 @@ YY_RULE_SETUP
 
 }
 	YY_BREAK
-case 12:
+case 15:
 YY_RULE_SETUP
-#line 58 "1.l"
+#line 77 "1.l"
 {
+        if(numPar<numParAux){
+                    strcpy(maxMethod, auxMaxMethod);
+                    numPar=numParAux;
+                    strcpy(classMaxMethod,actualClass);
+
+                    
+                }
+
+
+                numParAux=0;
+                BEGIN(METHODS);
+
+}
+	YY_BREAK
+case 16:
+YY_RULE_SETUP
+#line 91 "1.l"
+;
+	YY_BREAK
+case 17:
+YY_RULE_SETUP
+#line 93 "1.l"
+{
+        numMet++;
+        printf("\n\n METODO: %s \n\n", yytext);
+        
+        strcpy(auxMaxMethod, yytext);
+        
         for(int i =0;i<numClasses;i++){
             if(strcmp(classes[i],claseAnterior)==0){
                 indexAux=i;
@@ -880,22 +949,74 @@ YY_RULE_SETUP
         BEGIN(PAR);
 }
 	YY_BREAK
-case 13:
+case 18:
 YY_RULE_SETUP
-#line 68 "1.l"
+#line 108 "1.l"
+;
+	YY_BREAK
+case 19:
+YY_RULE_SETUP
+#line 110 "1.l"
+;
+	YY_BREAK
+case 20:
+YY_RULE_SETUP
+#line 111 "1.l"
 {
+                
+}
+	YY_BREAK
+case 21:
+YY_RULE_SETUP
+#line 114 "1.l"
+{
+    
+    numParAux++;
     printf("\n\nUn parametro %s\n\n", yytext);
 }
 	YY_BREAK
-case 14:
+case 22:
 YY_RULE_SETUP
-#line 72 "1.l"
+#line 122 "1.l"
 {
+
+
+                        strcpy(estereotipoAnterior, yytext);
+                        if(numEster==0){
+                               strcpy(estereotipos[numEster], yytext);
+                               numEster++;
+                               printf("\n\n Esta clase se ha añadido correctamente: %s \n\n", yytext);
+
+                            }else{
+                                for(int i=0; i<numEster;i++){
+                                    if(strcmp(estereotipos[i],yytext)==0){
+                                        auxRep = 1;
+                                    }
+                                }  
+
+                                if(auxRep==0){
+                                    strcpy(estereotipos[numEster], yytext);
+                                    numEster++;
+                                    printf(" Esta clase se ha añadido correctamente: %s \n\n", yytext);
+
+                                }else{
+                                    auxRep=0;
+                                    printf(" Clase repetida ERROR al añadir %s \n\n", yytext);
+                                }
+                            }
+}
+	YY_BREAK
+case 23:
+YY_RULE_SETUP
+#line 149 "1.l"
+{
+
                         strcpy(claseAnterior,yytext);
+                        strcpy(actualClass, yytext);
                         if(numClasses==0){
                                strcpy(classes[numClasses], yytext);
                                numClasses++;
-                               printf(" Esta clase se ha añadido correctamente: %s \n\n", yytext);
+                               printf("\n\n Esta clase se ha añadido correctamente: %s \n\n", yytext);
 
                             }else{
                                 for(int i=0; i<numClasses;i++){
@@ -919,30 +1040,32 @@ YY_RULE_SETUP
 
                     }
 	YY_BREAK
-case 15:
+case 24:
 YY_RULE_SETUP
-#line 103 "1.l"
+#line 182 "1.l"
 {
                         numRels++;
+                        printf("\n\n Se ha añadido una relacion correctamente \n\n");
                     }
 	YY_BREAK
-case 16:
+case 25:
 YY_RULE_SETUP
-#line 107 "1.l"
+#line 187 "1.l"
 ;
 	YY_BREAK
-case 17:
+case 26:
 YY_RULE_SETUP
-#line 108 "1.l"
+#line 188 "1.l"
 ECHO;
 	YY_BREAK
-#line 940 "lex.yy.c"
+#line 1062 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(CLASS):
 case YY_STATE_EOF(MEMBERS):
 case YY_STATE_EOF(METHODS):
 case YY_STATE_EOF(PAR):
 case YY_STATE_EOF(NOTE):
+case YY_STATE_EOF(ESTEROTIPOS):
 	yyterminate();
 
 	case YY_END_OF_BUFFER:
@@ -1233,7 +1356,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 66 )
+			if ( yy_current_state >= 81 )
 				yy_c = yy_meta[(unsigned int) yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
@@ -1261,11 +1384,11 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 66 )
+		if ( yy_current_state >= 81 )
 			yy_c = yy_meta[(unsigned int) yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
-	yy_is_jam = (yy_current_state == 65);
+	yy_is_jam = (yy_current_state == 80);
 
 	return yy_is_jam ? 0 : yy_current_state;
 }
@@ -1938,7 +2061,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 108 "1.l"
+#line 188 "1.l"
 
 
 /*Codigo de usuario*/
@@ -1952,7 +2075,7 @@ int main(){
         printf("\nClase: %s \n", classes[i]);
     }
 
-    printf("El número de clases es %d. \n", numClasses);
+    printf("El número de clases es %d y con estereotipo %i. \n", numClasses, numEster);
     printf("El número de relaciones es %d. \n", numRels);
     
 
@@ -1978,5 +2101,10 @@ int main(){
 
     printf("La clase con el mayor número de atributos es %s, con %d atributos.\n", classes[posMayorAttr], mayorAttr);
     printf("La clase con el mayor número de metodos es %s, con %d metodos.\n", classes[posMayorMet], mayorMet);
+    
+    
+    printf("El número de notas es %d.\n", notes);
+    printf("El método con más argumentos es %s de la clase %s",maxMethod, classMaxMethod);
+    
 
 }
