@@ -1,0 +1,20 @@
+PARSER_BEGIN (test)
+public class test{
+public static void main (String [] args) throws Exception {
+test parser = new test (System.in);
+parser.lst();
+}
+}
+PARSER_END (test)
+TOKEN : { <N : (["0"-"9"])+> |  <W: (["a"-"z"])+> } 
+SKIP : { <OTRO : ~[] > }
+void lst () : {
+Token t1, t2; String s;
+}{
+t1=<N> t2=<W> s=noterm (t1.image)
+{ System.out.println(s+t1.image); }
+}
+String noterm( String v) : { Token t1;
+}{
+t1=<N> { return v+t1.image; }
+}
