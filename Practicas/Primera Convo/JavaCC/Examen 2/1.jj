@@ -1,0 +1,203 @@
+options
+{
+    STATIC=true;
+}
+
+PARSER_BEGIN(practica)
+import java.util.ArrayList;
+/**
+ * - Numero de definiciones a color que aparezcan (OK)
+ * - Metodo con mayor cantidad argumentos de entrada (OK)
+ */
+public class practica{
+    /*
+     * A test
+     */
+    public static void main(String args[]) throws java.io.FileNotFoundException {
+    
+        practicaTokenManager tkmngr;
+            if ( args.length < 1 ) {
+           tkmngr = new practicaTokenManager( new SimpleCharStream(System.in) );
+            } else {
+           tkmngr = new practicaTokenManager( 
+                     new SimpleCharStream( new java.io.FileInputStream(args[0]),0,0 ) 
+                  );
+        };
+    
+        Token tk;
+    
+        if ( args.length < 1 ) {
+           System.out.print("Enter Expression: ");
+           System.out.flush();
+        };
+        
+        try {
+                while ( (tk = tkmngr.getNextToken()).kind != EOF );
+        } catch (TokenMgrError x) {
+            System.out.println("Exiting.");
+            throw x;
+        };
+    
+        System.out.println("\n\n\nNúmero de clases es: "+tkmngr.clasesCNT);
+        System.out.println("\nNúmero de relaciones es: "+tkmngr.numRel);
+        System.out.println("\nLa clase con el mayor número de atributos es "+tkmngr.maxClassMem+ ", con "+tkmngr.maxNumMem+" atributos.");
+        System.out.println("\nLa clase con el mayor número de metodos es "+tkmngr.maxClassMeth+ ", con "+tkmngr.maxNumMeth+" metodos.");
+        System.out.println("\nEl numero de definiciones de color es "+tkmngr.contColor);
+        System.out.println("\nEl metodo con mas parametros es "+tkmngr.MaxMethodPar+" con "+tkmngr.maxParCont+" parametros.");
+
+    
+        }
+
+}
+
+PARSER_END(practica)
+
+
+
+
+/*
+ * The terminals
+ */
+
+
+
+
+TOKEN_MGR_DECLS : {
+    static int clasesCNT = 0;
+    static int numRel = 0, maxNumMem = 0, maxNumMeth = 0, tmpNumMem = 0, tmpNumMeth = 0, contColor=0, tmpParCont=0, maxParCont=0;
+    static ArrayList<String> clases = new ArrayList<String>();
+    static String tmpClassName, maxClassMem, maxClassMeth, tmpMethodMaxPar, MaxMethodPar;
+}
+<*>TOKEN:{ 
+    <#ID: (["A"-"Z","a"-"z"])+>
+|   <#STRING: (<CHARAC>|<NUM>|(" "|"."|"+"|"*"|"_"|"-"))+> 
+|   <#CHARAC: ["A"-"Z","a"-"z"]>
+|   <#NUM:    ["0"-"9"]>
+
+|   <#ENDS:   ("<>"|"++"|"^")>
+|   <#END1:   (<ENDS>|"<")?(<STRING>)?>
+|   <#END2:   (<STRING>)?(<ENDS>|">")?>
+|   <#ARROW:  <END1>("-")(".-")?<END2>>
+
+|   <#EOL:    ";"|",">
+}
+
+TOKEN:{
+     <COM: "//">:COMENT
+|    <OPEN: "["> {  } : CLASS
+|    <NOTE_START: "[note:"> : NOTE
+|    <REL: (<ARROW>|"^")> {
+                    System.out.println("\n\n Relacion: "+image.toString()+"\n\n");
+
+                    numRel++;}
+}
+
+<COMENT>TOKEN: {
+    <EOL_COMENT: "\n">:DEFAULT
+}
+<NOTE>TOKEN : {
+        <CLOSE_NOTE: "]"> {  } : DEFAULT
+|        <COLOR_OPEN: "{">:COLOR
+ 
+}
+
+<COLOR>TOKEN : {
+     <COLOR_CLOSE: "}">{contColor++;}:NOTE
+
+}
+
+<CLASS>TOKEN : {
+    <ID_CLASS: (<ID>)> {            tmpClassName = image.toString();
+                                    int aux = 0;
+                                    if(clases.size() == 0){
+                                        clases.add(image.toString());
+                                        clasesCNT++;
+                                        System.out.println(image.toString());
+                                    }else{
+                                        for(int i =0; i<clases.size();i++){
+                                            if(clases.get(i).equals(image.toString())){
+                                                aux=1;
+                                            }
+                                        }  
+                                        if(aux==0){
+                                            clases.add(image.toString());
+                                            clasesCNT++;
+                                            System.out.println(image);
+                                        }
+                                    }
+                                  
+                                 }
+|   <BARRA_CLASS: "|"> {  } : MEMBERS
+|   <CLOSE_CLASS: "]"> {  } : DEFAULT
+
+}
+
+
+<MEMBERS>TOKEN: {
+    <BARRA_MEMBERS: "|"> { tmpNumMem++; } : METHODS
+|   <EOL_MEMBERS: <EOL>> { tmpNumMem++; }
+|   <CLOSE_MEMBERS: "]"> {  tmpNumMem++; 
+                            if (tmpNumMem > maxNumMem) {
+                                maxNumMem = tmpNumMem;
+                                tmpClassName = maxClassMem;
+                            }
+                            if (tmpNumMeth > maxNumMeth) {
+                                maxNumMeth = tmpNumMeth;
+                                tmpClassName = maxClassMeth;
+                            }
+                            tmpNumMem = tmpNumMeth = 0;} : DEFAULT
+
+}
+<METHODS>TOKEN: {
+    <ID_METHOD: <ID>> { tmpMethodMaxPar=image.toString();}
+|    <OPEN_METHODS: "("> {  } : PAR
+|   <EOL_METHODS: <EOL>> { tmpNumMeth++; }
+|   <CLOSE_METHODS: "]"> {  tmpNumMeth++;
+                            if (tmpNumMem > maxNumMem) {
+                                maxNumMem = tmpNumMem;
+                                maxClassMem = tmpClassName;
+                            }
+                            if (tmpNumMeth > maxNumMeth) {
+                                maxNumMeth = tmpNumMeth;
+                                maxClassMeth = tmpClassName;
+                            }
+                            tmpNumMem = tmpNumMeth = 0;} : DEFAULT
+
+}
+
+<PAR>TOKEN: {
+    <OPEN_PAR: ")"> { 
+        if(tmpParCont > maxParCont){
+            maxParCont = tmpParCont;
+            MaxMethodPar = tmpMethodMaxPar ;
+        }
+        tmpParCont=0;
+     } : METHODS
+|    <CHAR_PAR: <STRING>(":")?(<STRING>)?>{tmpParCont++;}
+}
+
+<*>SKIP:
+{
+  < ~[] > {;}
+| <("\n"|" ")> {;}
+}
+/*
+ * The nonterminals
+ */
+
+/*void parse () : {
+} {
+    (<NOTE_START>)?
+    (<OPEN>clase()(<BARRA_CLASS>)? (<CLOSE_CLASS>|<CLOSE_MEMBERS>|<CLOSE_METHODS>))+
+    (<NOTE_START>)?
+    (<EOF>)?
+
+    
+}
+
+void clase () : {
+} {
+  <ID> {token_source.clases++;}
+}*/
+
+

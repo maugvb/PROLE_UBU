@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+<!-- lo de arriba se lo traga sin contar -->
+<eje>
+<etiq1 atr1="v1" atr2='val2' atr3="val3">
+texto y mas texto
+</etiq1> <!-- una etiqueta de cierre-->
+y mira que bueno, incluso mas texto
+
+<?cgoPI1 una processing instructions que no tiene datos estructurados ?>
+
+<!-- esto es un comentario -->
+<etiqueta2 at1="valor1"/><!-- un elemento vacío -->
+
+<!-- esto lo voy a contar como una
+de inicio y una de cierre -->
+<etiq2 at2="v a   l 2" at3="val3"></etiq2> <!-- otro elemento vacío -->
+<?cgoPI2 pocos datos ?>
+
+<![CDATA[
+<etiq2 > <!-- este comentario no lo voy a contar -->
+]]>
+</eje>

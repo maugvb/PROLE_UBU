@@ -1,0 +1,24 @@
+** Inicio programa
+COMPUTE b = 5*20*6
+MOVE c TO var
+
+** Una sentencia evaluate
+EVALUATE x
+    WHEN 1   DISPLAY 100
+    WHEN 2   DISPLAY 200
+    WHEN 3+3 DISPLAY 600
+END-EVALUATE
+** Un condicional anidado
+IF a
+    COMPUTE c = 1
+ELSE
+    IF b
+        MOVE x TO var
+        MOVE 5 TO x
+    ELSE
+        COMPUTE x = 4*2+3/8
+    END-IF
+END-IF
+
+DISPLAY var * (x)
+** Fin del programa
