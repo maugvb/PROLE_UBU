@@ -31,90 +31,52 @@ struct LabelPayload {
 }
 
 
-%token EQUAL COMPUTE MOVE TO IF THEN PARENTHESIS_START PARENTHESIS_END EVALUATE END_EVALUATE PERFORM WHEN UNTIL END_PERFORM DISPLAY ELSE END_IF ADD SUB MUL DIV
+%token PARENTHESIS_START PARENTHESIS_END ARROW DIV MUL SUB ADD SEMICOL PRINT END BEGIN STEP TO FROM FOR DO WHILE ELSE ENDIF THEN IF
 %token <value> NUME
 %token <string> ID
 %%
 
 
-program: sentences;
 
-sentences: sent sentences
-    | sent;
 
-sent: assig
-    |  proc;
-
-assig: COMPUTE ID{printf("\tvalori %s\n", $2);} EQUAL arithexp {printf("\tasigna\n");}
-    |  proc_mov {printf("\tasigna\n");}
+prop: ID ARROW arithexp
+    |   IF arithexp THEN prop ENDIF
+    |   IF arithexp THEN prop ELSE prop ENFIF
+    |   WHILE arithexp DO prop
+    |   FOR ID FROM NUME TO arithexp DO prop
+    |   FOR ID FROM NUME TO arithexp STEP NUME DO prop
+    |   BEGIN lprop END
+    |   PRINT arithexp
     ;
 
-proc_mov: MOVE fac_mov
 
-fac_mov: NUME TO ID {
-                       printf("\tvalori %s\n", $3);
-                       printf("\tmete %d\n", $1); 
-                    }
-    |  ID TO ID {   
-                    printf("\tvalori %s\n", $3);
-                    printf("\tvalord %s\n", $1);
-                }
+prop_epsilon:
+
+
+lprop: prop SEMICOL lprop
+    |  prop
     ;
 
-proc: IF arithexp sentences elseopt 
-    |  EVALUATE newlabel ID {
-                            printf("\tvalord %s\n", $3);
-                            }  
-                            
-        whenclause {
-            $<value>$ = $<value>2;
-            printf("\tvea LBL%d\n", $<value>2); 
-            printf("LBL%d\n", getLabel()); 
-            printf("\tvalord %s\n", $3);
-        }
+arithexp: arithexp ADD term
+   |    arithexp SUB term
+   |    term 
+   ;
 
-        epsilonwhen END_EVALUATE 
-    |  PERFORM UNTIL arithexp sentences END_PERFORM 
-    |  displayclause{printf("\tprint\n");}
+term: term MUL fact
+    |  term DIV fact
+    | fact
     ;
 
-displayclause: DISPLAY arithexp;
-
-elseopt: ELSE sentences END_IF 
-    |  END_IF 
+fact: ID
+    |   NUME
+    |   PARENTHESIS_START arithexp PARENTHESIS_END
     ;
 
-whenclause: WHEN arithexp {
-            printf("\tsub\n");
-            int label = getNewLabel();
-            printf("\tsifalsevea LBL%d\n",label);
-            } sentences;
 
-epsilonwhen: WHEN arithexp{
-            printf("\tsub\n");
-            int label = getNewLabel();
-            printf("\tsifalsevea LBL%d\n",label);} sentences {printf("\tvea LBL%d\n", $<value>-1); } epsilonwhen 
-    | //EPSILON
-    ;
 
-arithexp: arithexp ADD multexp { printf("\tsum\n"); }
-     |  arithexp SUB{ printf("\tsub\n"); } multexp 
-     |  multexp	
-     ;
 
-multexp: multexp MUL value { printf("\tmul\n"); }
-     |  multexp DIV value { printf("\tdiv\n"); }
-     |  value	
-     ;
 
-newlabel:
-    { $<value>$ = getNewLabel(); 
-    }
-    ;
-value: NUME { printf("\tmete %d\n", $1); }
-     | ID  { printf("\tvalord %s\n", $1); }
-     | PARENTHESIS_START arithexp PARENTHESIS_END
-     ;
+
 %%
 
 void yyerror( char *s) { 

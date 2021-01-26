@@ -1,0 +1,148 @@
+Enunciado de la tercera práctica para la segunda convocatoria de PL.
+
+Se trata de utilizar JavaCC para obtener un compilador que traduzca un 
+lenguaje de alto nivel a código de máquina de pila abstracta. 
+Debe ser capaz de leer por la entrada estándar y por un fichero que se
+le pase como argumento.
+
+El lenguaje de alto nivel es muy sencillo. No tiene declaración de tipos.
+El único tipo que permite es el tipo entero. En las condiciones de las
+instrucciones if, for y while, el valor 0 se interpreta como falso y
+cualquier otro valor como cierto.
+Los nombres de las variables sólo pueden contener números, letras mayúsculas,
+minúsculas, y guiones bajos; pero no pueden comenzar por número.
+
+Los comentarios en el lenguaje serán de dos tipos:
+ - en línea: comenzando por '/-->' hasta el fin de línea.
+ - multilínea: comenzando por '/--*' y finalizando con '*--/'.
+
+
+La gramática del lenguaje es la siguiente:
+
+     prop -> ID '<-' arithexp
+          |  'if' arithexp 'then' prop 'endif'
+          |  'if' arithexp 'then' prop 'else' prop 'endif'
+          |  'while' arithexp 'do' prop
+          |  'for' ID 'from' NUM 'to' arithexp 'do' prop 
+          |  'for' ID 'from' NUM 'to' arithexp 'step' NUM 'do' prop 
+          |  'begin' lprop 'end'
+          |  'print' arithexp
+
+    lprop -> prop ';' lprop 
+          |  prop 
+
+ arithexp -> arithexp '+' term 
+          |  arithexp '-' term 
+          |  term
+
+     term -> term '*' fact  
+          |  term '/' fact  
+          |  fact
+
+     fact -> ID 
+          |  NUM 
+          |  '(' arithexp ')'
+
+NOTAS: Se debe reescribir la gramática: eliminar la recursividad, factorizar...
+       antes de empezar a programar en JavaCC (en caso de que sea necesario).
+       No se permite utilizar el LOOKAHEAD de JavaCC.
+       NUM representa un número entero e ID un identificador/variable del
+       lenguaje. El resto de comandos entre comillas simples representan 
+       palabras o símbolos reservados del lenguaje.
+
+Ante una entrada como:
+
+begin 
+  a<-8 ;
+  while a do begin
+    a<-a-1 ;
+    print(a) ;
+    if a-4 then
+      print ((2*a))
+    else
+      print (a/2)
+    endif
+  end ;
+  print (0)
+end
+
+Debería generar la secuencia (salvo quizás el nombre concreto de las etiquetas):
+
+	valori a
+	mete 8
+	asigna
+LBL0
+	valord a
+	sifalsovea LBL1
+	valori a
+	valord a
+	mete 1
+	sub
+	asigna
+	valord a
+	print
+	valord a
+	mete 4
+	sub
+	sifalsovea LBL2
+	mete 2
+	valord a
+	mul
+	print
+	vea LBL3
+LBL2
+	valord a
+	mete 2
+	div
+	print
+LBL3
+	vea LBL0
+LBL1
+	mete 0
+	print
+
+
+
+Ante una entrada como
+
+      /--* Comienza el programa *--/
+begin
+  _a<-4;
+  for i from 0 to 7*2 step 2 do
+    _a <- (_a*i)+7
+  ;   /--* Finaliza el bucle *--/
+  print (   (_a) )
+end   /--* Finaliza el programa *--/
+
+Debería generar la secuencia (salvo quizás el nombre concreto de las etiquetas):
+
+	valori _a
+	mete 4
+	asigna
+	valori i
+	mete 0
+	asigna
+LBL0
+	valord i
+	mete 7
+    mete 2
+    mul
+	sub
+	sifalsovea LBL1
+	valori _a
+	valord _a
+	valord i
+	mul
+	mete 7
+	sum
+	asigna
+	valori i
+	valord i
+	mete 2
+	sum
+	asigna
+	vea LBL0
+LBL1
+	valord _a
+	print
+

@@ -1,0 +1,90 @@
+Enunciado de la segunda práctica para la segunda convocatoria de PL.
+
+Usando JavaCC crear un programa para procesar ficheros de
+texto que contenga diagramas de clases en código yuml.
+Yuml es una especificación que permite representar diagramas
+UML en formato texto, para probarlo puedes acceder a la 
+siguiente web: https://yuml.me/diagram/scruffy/class/draw.
+
+El analizador generado debe ser capaz de leer como entrada un
+fichero de yuml y, al finalizar el procesado, mostrar las 
+siguientes estadísticas:
+- el número de clases: diferenciando entre si tienen estereotipos
+  (texto entre ángulos) o no.
+- el número de relaciones: la expresión regular de la relación 
+  debe ser general y admitir todos los tipos existentes (herencia, 
+  agregación, con decoradores, cardinalidades...). Las líneas de
+  las notas se pueden contar como relación por simplificar.
+- el método con mayor número de argumentos, e indicar en qué clase
+  se ha definido.
+- la clase con mayor número de atributos miembro.
+- el número de notas.
+
+Los comentarios se deben ignorar para todas las estadísticas.
+Deberá ser capaz de procesar un archivo pasándoselo por 
+parámetro.
+
+Se valorará la calidad del código (utilizar definiciones 
+regulares, nombres de variables con significado, etc.) así 
+como que pueda ser capaz de reconocer cualquier fuente 
+interpretable por yuml, más información sobre la gramática y
+especificaciones del yuml en los siguientes enlaces:
+- https://yuml.me/diagram/scruffy/class/samples
+- https://www.cs.utexas.edu/~schwartz/MDELite/Docs/YumlManual.html
+
+Nota: una clase puede aparecer en diversas ocasiones durante el código, 
+      por lo que para realizar correctamente las estadísticas será necesario 
+      mantener una estructura donde se apuntara qué clases ya han aparecido. 
+      Como puede resultar complicado utilizar estructuras complejas en C, 
+      se puede utilizar un array de apuntadores (char*) de tamaño fijo.
+
+Ante un ejemplo como el siguiente:
+------------------------------------------------------------------
+// Diagrama de ejemplo
+// -------------------
+
+// Clases y sus relaciones
+[Customer] <>- orders*>[Order] ++-0..*> [LineItem]
+
+// Anotación
+[Order] -   [note: An annotation about Order class {bg:wheat}]
+
+// Más detalles en la clase: atributos y métodos
+[Customer|+forname: string;+surname: string;-password: string|login(user,pass)]
+
+Debería dar:
+- El número de clases es 3, con estereotipos 0.
+- El número de relaciones es 3.
+- La clase con el mayor número de atributos miembro es "Customer", con 3 atributos.
+- El método con más argumentos es "login" de la clase "Customer".
+- El número de notas es 1.
+
+
+
+Ante un ejemplo como el siguiente:
+------------------------------------------------------------------
+// Anotaciones que no tenemos en cuenta como clase
+[note: Anotación sin línea y color {bg:wheat}],[note: Anotación sin línea y sin color {bg:yellow}],
+
+// Clases y sus relaciones
+[<<abstract>>; Customer] ^-.- [BigCustomer]
+[<<abstract>>; Customer] ^-.- [SimpleCustomer|name;number;id;bank_account]
+
+[BigCustomer]<>1-orders 0..*>[Order], 
+[Order]++*-*>[LineItem], [Order]-1>[DeliveryMethod], [Order]*-*>[Product], 
+[Category]<->[Product|-description:string|+getDescription():string;+getID():int;#setID(id:int) ; -computePrice():double]
+
+// Algunas clases pueden aparecer varias veces pero se debe contar solo una vez.
+[DeliveryMethod] ^ [National | +cif: string]
+[DeliveryMethod] ^  [International|+country: string]
+
+[LineItem|-prod:string; -qty:int|+getProd():string;+getQuantity():int]
+
+
+Debería dar:
+- El número de clases es 10 y con estereotipos 1.
+- El número de relaciones es 9.
+- La clase con el mayor número de atributos es "SimpleCustomer", con 4 atributos.
+- El método con más argumentos es "setID" de la clase "Product".
+- El número de notas es 2.
+

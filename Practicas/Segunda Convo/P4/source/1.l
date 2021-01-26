@@ -18,27 +18,29 @@ NUM [0-9]
 }
 
 
-"COMPUTE" { return COMPUTE;}
-"=" { return EQUAL;}
-"MOVE" { return MOVE;}
-"TO" { return TO;}
-"IF" { return IF;}
-"THEN" { return THEN;}
-"EVALUATE" { return EVALUATE;}
-"END-EVALUATE" { return END_EVALUATE;}
-"PERFORM" { return PERFORM;}
-"UNTIL" { return UNTIL;}
-"END-PERFORM" { return END_PERFORM;}
-"DISPLAY" { return DISPLAY;}
-"ELSE" { return ELSE;}
-"END-IF" { return END_IF;}
-"WHEN" { return WHEN;}
-"+" { return ADD;}
-"-" { return SUB;}
-"*" { return MUL;}
-"/" { return DIV;}
-"(" { return PARENTHESIS_START;}
-")" { return PARENTHESIS_END;}
+"if" { return IF; }
+"then" { return THEN; }
+"endif" { return ENDIF; }
+"else" { return ELSE; }
+"while" { return WHILE; }
+"do"   { return DO; }
+"for" { return FOR; }
+"from" { return FROM; }
+"to" { return TO; }
+"step" { return STEP; }
+"begin" { return BEGIN; }
+"end" { return END; }
+"print" { return PRINT; }
+";" { return SEMICOL; }
+"+" { return ADD; }
+"-" { return SUB; }
+"*" { return MUL; }
+"/" { return DIV; }
+"(" { return PARENTHESIS_START; }
+")" { return PARENTHESIS_END; }
+"<-" { return ARROW; }
+
+
 {ALPHA}({ALPHA}|{NUM})* { 
                             yylval.string = strdup(yytext); 
                             return ID;
