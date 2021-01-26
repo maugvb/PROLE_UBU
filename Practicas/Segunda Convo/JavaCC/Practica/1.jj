@@ -38,6 +38,7 @@ public class practica{
         System.out.println("\n\n\nNúmero de clases es "+tkmngr.clasesCNT+", con estereotipos "+ tkmngr.stereotypeNum);
         System.out.println("\nNúmero de relaciones es: "+tkmngr.numRel);
         System.out.println("\nLa clase con el mayor número de atributos es "+tkmngr.maxClassMem+ ", con "+tkmngr.maxNumMem+" atributos.");
+        System.out.println("\nEl método con mas argumentos es '"+tkmngr.methMaxAtr+"' de la clase '"+tkmngr.maxAtrClass+"'");
         System.out.println("\nEl número de notas es "+tkmngr.notes);
 
     
@@ -59,10 +60,10 @@ PARSER_END(practica)
 
 TOKEN_MGR_DECLS : {
     static int clasesCNT = 0;
-    static int numRel = 0, maxNumMem = 0, tmpNumMem = 0, tmpNumMeth = 0, stereotypeNum = 0, notes=0;
+    static int numRel = 0, maxNumMem = 0, tmpNumMem = 0, tmpNumMeth = 0, stereotypeNum = 0, notes=0, numAtr=0, auxNumAtr=0;
     static ArrayList<String> clases = new ArrayList<String>();
     static ArrayList<String> stereotype = new ArrayList<String>();
-    static String tmpClassName, maxClassMem, auxMaxClassMem, tmpStereotypeName;
+    static String tmpClassName, maxClassMem, auxMaxClassMem, tmpStereotypeName, maxAtrClass, methMaxAtr, auxMethodId;
 }
 <*>TOKEN:{ 
     <#ID: (["A"-"Z","a"-"z"])+>
@@ -76,6 +77,8 @@ TOKEN_MGR_DECLS : {
 |   <#ARROW:  <END1>("-")(".-")?<END2>>
 
 |   <#EOL:    ";"|",">
+|   <#SPECIAL: "+"|"-"|(":"" ")?|"_">
+|   <#IDFULL: (["A"-"Z","a"-"z","0"-"9"])+>
 }
 
 TOKEN:{
@@ -171,14 +174,40 @@ TOKEN:{
 
 }
 <METHODS>TOKEN: {
-    <OPEN_METHODS: "("> {  } : PAR
+    <ID_METHOD: (<SPECIAL>)?(<IDFULL>)> {auxMethodId=image.toString();
+                                            System.out.println("NUEVO ATRIBUTO ' "+image+" '");}
+|   <OPEN_METHODS: "("> {  } : PAR
+|   <NEW_METHOD: ";"> {
+    if(numAtr<auxNumAtr){
+        methMaxAtr= auxMethodId;
+        numAtr=auxNumAtr;
+        maxAtrClass = auxMaxClassMem;
+
+        
+    }
+
+
+    auxNumAtr=0;
+}
 |   <EOL_METHODS: <EOL>> { tmpNumMeth++; }
-|   <CLOSE_METHODS: "]"> {  } : DEFAULT
+|   <CLOSE_METHODS: "]"> { 
+    if(numAtr<auxNumAtr){
+        methMaxAtr= auxMethodId;
+        numAtr=auxNumAtr;
+        maxAtrClass = auxMaxClassMem;
+
+        
+    }
+
+
+    auxNumAtr=0;
+ } : DEFAULT
 
 }
 
 <PAR>TOKEN: {
-    <OPEN_PAR: ")"> {  } : METHODS
+     <OPEN_PAR: ")"> {  } : METHODS
+|    <PAR_TOKEN: (<STRING>|" "|":")> { auxNumAtr++; }
 }
 
 <*>SKIP:
