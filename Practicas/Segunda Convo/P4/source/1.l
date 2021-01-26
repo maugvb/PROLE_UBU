@@ -4,18 +4,24 @@
 %}
 
 
+%x COMMENT
 
-
-ALPHA [a-zA-Z]
+ALPHA ([a-zA-Z]|"_")
 NUM [0-9]
 %%
+
+
+
 [ \t\r\n]           ;
-"**".*   ;
+"/--*"  BEGIN(COMMENT);
+<COMMENT>"*--/" BEGIN(INITIAL);
+<COMMENT>. ;
 
 {NUM}+      {    
     yylval.value = atoi(yytext);
     return NUME;
 }
+
 
 
 "if" { return IF; }
@@ -28,7 +34,7 @@ NUM [0-9]
 "from" { return FROM; }
 "to" { return TO; }
 "step" { return STEP; }
-"begin" { return BEGIN; }
+"begin" { return BEGINTK; }
 "end" { return END; }
 "print" { return PRINT; }
 ";" { return SEMICOL; }

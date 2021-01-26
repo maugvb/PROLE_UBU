@@ -1,0 +1,8 @@
+      /--* Comienza el programa *--/
+begin
+  _a<-4;
+  for i from 0 to 7*2 step 2 do
+    _a <- (_a*i)+7
+  ;   /--* Finaliza el bucle *--/
+  print (   (_a) )
+end   /--* Finaliza el programa *--/

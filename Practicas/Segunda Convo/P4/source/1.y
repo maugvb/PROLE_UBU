@@ -12,10 +12,6 @@ int getNewLabel() {
     return labelCount++;
 }
 
-int getLabel(){
-    return labelCount-1;
-}
-
 struct LabelPayload {
     int currentLabel;
     int endLabel;
@@ -31,44 +27,44 @@ struct LabelPayload {
 }
 
 
-%token PARENTHESIS_START PARENTHESIS_END ARROW DIV MUL SUB ADD SEMICOL PRINT END BEGIN STEP TO FROM FOR DO WHILE ELSE ENDIF THEN IF
+%token PARENTHESIS_START PARENTHESIS_END ARROW DIV MUL SUB ADD SEMICOL PRINT END BEGINTK STEP TO FROM FOR DO WHILE ELSE ENDIF THEN IF
 %token <value> NUME
 %token <string> ID
 %%
 
 
-
-
-prop: ID ARROW arithexp
-    |   IF arithexp THEN prop ENDIF
-    |   IF arithexp THEN prop ELSE prop ENFIF
-    |   WHILE arithexp DO prop
+prop: ID{printf("\tvalori %s\n", $<string>1);} ARROW arithexp{printf("\tasigna\n");}
+    |   IF{int label = getNewLabel();  printf("\tsifalsovea LBL%d\n",label);} arithexp THEN prop {int label = getNewLabel();  printf("\tvea LBL%d\n",label);} ENDIF
+    |   IF arithexp{int label = getNewLabel(); $<value>$=label; printf("\tsifalsovea LBL%d\n",label);}  THEN  prop {int label = getNewLabel(); $<value>$=label; printf("\tvea LBL%d\n",label);} ELSE{printf("LBL%d\n", $<value>3);} prop {printf("LBL %d\n", $<value>6); }ENDIF 
+    |   WHILE {int label = getNewLabel(); 
+                $<value>$=label;
+                printf("\nLBL%d\n",label);} arithexp{
+                                                        int label = getNewLabel();
+                                                        $<value>$=label;
+                                                        printf("\tsifalsovea LBL%d\n",label);
+                                                        } DO prop {printf("\tvea LBL%d\n", $<value>2);printf("\nLBL%d\n",$<value>4);}
     |   FOR ID FROM NUME TO arithexp DO prop
     |   FOR ID FROM NUME TO arithexp STEP NUME DO prop
-    |   BEGIN lprop END
-    |   PRINT arithexp
+    |   BEGINTK lprop END
+    |   PRINT arithexp {printf("\tprint\n");}
     ;
 
-
-prop_epsilon:
-
-
-lprop: prop SEMICOL lprop
-    |  prop
+lprop: prop SEMICOL lprop 
+    |  prop 
     ;
 
-arithexp: arithexp ADD term
-   |    arithexp SUB term
+arithexp: arithexp ADD term {printf("\tadd\n");}
+   |    arithexp SUB term {printf("\tsub\n");}
    |    term 
    ;
 
-term: term MUL fact
-    |  term DIV fact
+term: term MUL fact {printf("\tmul\n");}
+    |  term DIV fact {printf("\tdiv\n");}
     | fact
     ;
 
-fact: ID
-    |   NUME
+fact: ID {printf("\tvalord %s\n", $1);}
+    |   NUME { printf("\tmete %d\n", $1); }
     |   PARENTHESIS_START arithexp PARENTHESIS_END
     ;
 

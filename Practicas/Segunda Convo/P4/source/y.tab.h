@@ -39,53 +39,53 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     EQUAL = 258,
-     COMPUTE = 259,
-     MOVE = 260,
-     TO = 261,
-     IF = 262,
-     THEN = 263,
-     PARENTHESIS_START = 264,
-     PARENTHESIS_END = 265,
-     EVALUATE = 266,
-     END_EVALUATE = 267,
-     PERFORM = 268,
-     WHEN = 269,
-     UNTIL = 270,
-     END_PERFORM = 271,
-     DISPLAY = 272,
-     ELSE = 273,
-     END_IF = 274,
-     ADD = 275,
-     SUB = 276,
-     MUL = 277,
-     DIV = 278,
+     PARENTHESIS_START = 258,
+     PARENTHESIS_END = 259,
+     ARROW = 260,
+     DIV = 261,
+     MUL = 262,
+     SUB = 263,
+     ADD = 264,
+     SEMICOL = 265,
+     PRINT = 266,
+     END = 267,
+     BEGINTK = 268,
+     STEP = 269,
+     TO = 270,
+     FROM = 271,
+     FOR = 272,
+     DO = 273,
+     WHILE = 274,
+     ELSE = 275,
+     ENDIF = 276,
+     THEN = 277,
+     IF = 278,
      NUME = 279,
      ID = 280
    };
 #endif
 /* Tokens.  */
-#define EQUAL 258
-#define COMPUTE 259
-#define MOVE 260
-#define TO 261
-#define IF 262
-#define THEN 263
-#define PARENTHESIS_START 264
-#define PARENTHESIS_END 265
-#define EVALUATE 266
-#define END_EVALUATE 267
-#define PERFORM 268
-#define WHEN 269
-#define UNTIL 270
-#define END_PERFORM 271
-#define DISPLAY 272
-#define ELSE 273
-#define END_IF 274
-#define ADD 275
-#define SUB 276
-#define MUL 277
-#define DIV 278
+#define PARENTHESIS_START 258
+#define PARENTHESIS_END 259
+#define ARROW 260
+#define DIV 261
+#define MUL 262
+#define SUB 263
+#define ADD 264
+#define SEMICOL 265
+#define PRINT 266
+#define END 267
+#define BEGINTK 268
+#define STEP 269
+#define TO 270
+#define FROM 271
+#define FOR 272
+#define DO 273
+#define WHILE 274
+#define ELSE 275
+#define ENDIF 276
+#define THEN 277
+#define IF 278
 #define NUME 279
 #define ID 280
 
@@ -94,7 +94,7 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 27 "1.y"
+#line 23 "1.y"
 {
     int value;
     char *string;
