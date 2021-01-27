@@ -43,8 +43,29 @@ prop: ID{printf("\tvalori %s\n", $<string>1);} ARROW arithexp{printf("\tasigna\n
                                                         $<value>$=label;
                                                         printf("\tsifalsovea LBL%d\n",label);
                                                         } DO prop {printf("\tvea LBL%d\n", $<value>2);printf("\nLBL%d\n",$<value>4);}
-    |   FOR ID FROM NUME TO arithexp DO prop
-    |   FOR ID FROM NUME TO arithexp STEP NUME DO prop
+    |   FOR { int label = getNewLabel();  printf("LBL%d\n",label);} ID FROM NUME TO arithexp  DO prop
+    |   FOR  ID FROM NUME {                                 printf("\tvalori %s\n", $2);
+                                                            printf("\tmete %d\n", $<value>4);
+                                                            printf("\tasigna\n");
+                                                            int label = getNewLabel();
+                                                            $<value>$=label;  
+                                                            printf("LBL%d\n",label);
+                                                            printf("\tvalori %s\n",$2);
+                                                            
+                                                        } TO arithexp {
+                                                                    printf("\tsub\n");
+                                                                    int label = getNewLabel(); 
+                                                                    $<value>$=label;
+                                                                    printf("\tsifalsovea LBL%d\n",label);
+                                                                    } STEP NUME DO prop {
+                                                                                    printf("\tvalori %s\n",$2);
+                                                                                    printf("\tvalord %s\n",$2);
+                                                                                    printf("\tmete %d\n",$<value>10);
+                                                                                    printf("\tsum\n");
+                                                                                    printf("\tasigna\n");
+                                                                                    printf("\tvea LBL%d\n", $<value>5);
+                                                                                    printf("LBL%d\n", $<value>8);
+                                                                                }
     |   BEGINTK lprop END
     |   PRINT arithexp {printf("\tprint\n");}
     ;
@@ -53,7 +74,7 @@ lprop: prop SEMICOL lprop
     |  prop 
     ;
 
-arithexp: arithexp ADD term {printf("\tadd\n");}
+arithexp: arithexp ADD term {printf("\tsum\n");}
    |    arithexp SUB term {printf("\tsub\n");}
    |    term 
    ;
