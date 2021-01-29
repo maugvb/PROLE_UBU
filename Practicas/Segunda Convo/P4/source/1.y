@@ -46,14 +46,14 @@ prop: ID
     |   WHILE 
               {int label = getNewLabel(); 
                $<value>$=label;
-               printf("\nLBL%d\n",label);} 
+               printf("LBL%d\n",label);} 
                                             arithexp
                                                     {int label = getNewLabel();
                                                      $<value>$=label;
                                                      printf("\tsifalsovea LBL%d\n",label);} 
                                                                                             DO prop 
                                                                                                     {printf("\tvea LBL%d\n", $<value>2);
-                                                                                                     printf("\nLBL%d\n",$<value>4);}
+                                                                                                     printf("LBL%d\n",$<value>4);}
     |   FOR  ID FROM NUME 
                             {printf("\tvalori %s\n", $2);
                              printf("\tmete %d\n", $<value>4);
@@ -64,7 +64,9 @@ prop: ID
                              printf("\tvalori %s\n",$2);} 
                                                             TO arithexp 
                                                                         {printf("\tsub\n");
-                                                                         } forEnum
+                                                                         int label = getNewLabel(); 
+                                                                         $<value>$=label;
+                                                                         printf("\tsifalsovea LBL%d\n",label);} forEnum
                                                                                                                 
     |   BEGINTK lprop END
 
@@ -73,7 +75,7 @@ prop: ID
 
 ifOptional:  
                ELSE {printf("LBL%d\n", $<value>-3);}
-               prop {printf("LBL %d\n", $<value>0); }
+               prop {printf("LBL%d\n", $<value>0); }
             ENDIF                                                                                                 
     |     {printf("LBL%d\n", $<value>-3); printf("LBL%d\n", $<value>0);}
            ENDIF 

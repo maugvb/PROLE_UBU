@@ -480,9 +480,9 @@ static const yytype_int8 yyrhs[] =
 static const yytype_uint8 yyrline[] =
 {
        0,    37,    37,    36,    40,    42,    40,    47,    51,    46,
-      58,    66,    57,    69,    71,    75,    76,    75,    78,    78,
-      81,    89,    99,   100,   103,   104,   105,   108,   109,   110,
-     113,   114,   115
+      58,    66,    57,    71,    73,    77,    78,    77,    80,    80,
+      83,    91,   101,   102,   105,   106,   107,   110,   111,   112,
+     115,   116,   117
 };
 #endif
 
@@ -1448,7 +1448,7 @@ yyreduce:
 #line 47 "1.y"
     {int label = getNewLabel(); 
                (yyval.value)=label;
-               printf("\nLBL%d\n",label);}
+               printf("LBL%d\n",label);}
     break;
 
   case 8:
@@ -1461,7 +1461,7 @@ yyreduce:
   case 9:
 #line 55 "1.y"
     {printf("\tvea LBL%d\n", (yyvsp[(2) - (6)].value));
-                                                                                                     printf("\nLBL%d\n",(yyvsp[(4) - (6)].value));}
+                                                                                                     printf("LBL%d\n",(yyvsp[(4) - (6)].value));}
     break;
 
   case 10:
@@ -1478,31 +1478,33 @@ yyreduce:
   case 11:
 #line 66 "1.y"
     {printf("\tsub\n");
-                                                                         }
+                                                                         int label = getNewLabel(); 
+                                                                         (yyval.value)=label;
+                                                                         printf("\tsifalsovea LBL%d\n",label);}
     break;
 
   case 14:
-#line 71 "1.y"
+#line 73 "1.y"
     {printf("\tprint\n");}
     break;
 
   case 15:
-#line 75 "1.y"
+#line 77 "1.y"
     {printf("LBL%d\n", (yyvsp[(-3) - (1)].value));}
     break;
 
   case 16:
-#line 76 "1.y"
-    {printf("LBL %d\n", (yyvsp[(0) - (3)].value)); }
+#line 78 "1.y"
+    {printf("LBL%d\n", (yyvsp[(0) - (3)].value)); }
     break;
 
   case 18:
-#line 78 "1.y"
+#line 80 "1.y"
     {printf("LBL%d\n", (yyvsp[(-3) - (0)].value)); printf("LBL%d\n", (yyvsp[(0) - (0)].value));}
     break;
 
   case 20:
-#line 82 "1.y"
+#line 84 "1.y"
     {printf("\tvalori %s\n",(yyvsp[(-6) - (4)].string));
                              printf("\tvalord %s\n",(yyvsp[(-6) - (4)].string));
                              printf("\tmete %d\n",(yyvsp[(2) - (4)].value));
@@ -1513,7 +1515,7 @@ yyreduce:
     break;
 
   case 21:
-#line 90 "1.y"
+#line 92 "1.y"
     {printf("\tvalori %s\n",(yyvsp[(-6) - (2)].string));
                  printf("\tvalord %s\n",(yyvsp[(-6) - (2)].string));
                  printf("\tmete 1\n");
@@ -1524,38 +1526,38 @@ yyreduce:
     break;
 
   case 24:
-#line 103 "1.y"
+#line 105 "1.y"
     {printf("\tsum\n");}
     break;
 
   case 25:
-#line 104 "1.y"
+#line 106 "1.y"
     {printf("\tsub\n");}
     break;
 
   case 27:
-#line 108 "1.y"
+#line 110 "1.y"
     {printf("\tmul\n");}
     break;
 
   case 28:
-#line 109 "1.y"
+#line 111 "1.y"
     {printf("\tdiv\n");}
     break;
 
   case 30:
-#line 113 "1.y"
+#line 115 "1.y"
     {printf("\tvalord %s\n", (yyvsp[(1) - (1)].string));}
     break;
 
   case 31:
-#line 114 "1.y"
+#line 116 "1.y"
     { printf("\tmete %d\n", (yyvsp[(1) - (1)].value)); }
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1559 "y.tab.c"
+#line 1561 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1769,7 +1771,7 @@ yyreturn:
 }
 
 
-#line 123 "1.y"
+#line 125 "1.y"
 
 
 void yyerror( char *s) { 
