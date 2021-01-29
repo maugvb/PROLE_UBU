@@ -33,42 +33,74 @@ struct LabelPayload {
 %%
 
 
-prop: ID{printf("\tvalori %s\n", $<string>1);} ARROW arithexp{printf("\tasigna\n");}
-    |   IF{int label = getNewLabel();  printf("\tsifalsovea LBL%d\n",label);} arithexp THEN prop {int label = getNewLabel();  printf("\tvea LBL%d\n",label);} ENDIF
-    |   IF arithexp{int label = getNewLabel(); $<value>$=label; printf("\tsifalsovea LBL%d\n",label);}  THEN  prop {int label = getNewLabel(); $<value>$=label; printf("\tvea LBL%d\n",label);} ELSE{printf("LBL%d\n", $<value>3);} prop {printf("LBL %d\n", $<value>6); }ENDIF 
-    |   WHILE {int label = getNewLabel(); 
-                $<value>$=label;
-                printf("\nLBL%d\n",label);} arithexp{
-                                                        int label = getNewLabel();
-                                                        $<value>$=label;
-                                                        printf("\tsifalsovea LBL%d\n",label);
-                                                        } DO prop {printf("\tvea LBL%d\n", $<value>2);printf("\nLBL%d\n",$<value>4);}
-    |   FOR { int label = getNewLabel();  printf("LBL%d\n",label);} ID FROM NUME TO arithexp  DO prop
-    |   FOR  ID FROM NUME {                                 printf("\tvalori %s\n", $2);
-                                                            printf("\tmete %d\n", $<value>4);
-                                                            printf("\tasigna\n");
-                                                            int label = getNewLabel();
-                                                            $<value>$=label;  
-                                                            printf("LBL%d\n",label);
-                                                            printf("\tvalori %s\n",$2);
-                                                            
-                                                        } TO arithexp {
-                                                                    printf("\tsub\n");
-                                                                    int label = getNewLabel(); 
-                                                                    $<value>$=label;
-                                                                    printf("\tsifalsovea LBL%d\n",label);
-                                                                    } STEP NUME DO prop {
-                                                                                    printf("\tvalori %s\n",$2);
-                                                                                    printf("\tvalord %s\n",$2);
-                                                                                    printf("\tmete %d\n",$<value>10);
-                                                                                    printf("\tsum\n");
-                                                                                    printf("\tasigna\n");
-                                                                                    printf("\tvea LBL%d\n", $<value>5);
-                                                                                    printf("LBL%d\n", $<value>8);
-                                                                                }
+prop: ID 
+        {printf("\tvalori %s\n", $<string>1);} 
+                                                ARROW arithexp
+                                                                {printf("\tasigna\n");}
+    |   IF arithexp ifOptional
+ 
+                                                                        
+                                                                                                        
+    |   WHILE 
+              {int label = getNewLabel(); 
+               $<value>$=label;
+               printf("\nLBL%d\n",label);} 
+                                            arithexp
+                                                    {int label = getNewLabel();
+                                                     $<value>$=label;
+                                                     printf("\tsifalsovea LBL%d\n",label);} 
+                                                                                            DO prop 
+                                                                                                    {printf("\tvea LBL%d\n", $<value>2);
+                                                                                                     printf("\nLBL%d\n",$<value>4);}
+    |   FOR  ID FROM NUME 
+                            {printf("\tvalori %s\n", $2);
+                             printf("\tmete %d\n", $<value>4);
+                             printf("\tasigna\n");
+                             int label = getNewLabel();
+                             $<value>$=label;
+                             printf("LBL%d\n",label);
+                             printf("\tvalori %s\n",$2);} 
+                                                            TO arithexp 
+                                                                        {printf("\tsub\n");
+                                                                         } forEnum
+                                                                                                                
     |   BEGINTK lprop END
+
     |   PRINT arithexp {printf("\tprint\n");}
     ;
+
+ifOptional: THEN prop { int label = getNewLabel(); 
+                        $<value>$=label; 
+                        printf("\tvea LBL%d\n",label);}  ENDIF {printf("LBL%d\n", $<value>3);} 
+    |      {int label = getNewLabel(); 
+            $<value>$=label; 
+            printf("\tsifalsovea LBL%d\n",label);}
+                                                    THEN prop{  int label = getNewLabel(); 
+                                                                $<value>$=label; 
+                                                                printf("\tvea LBL%d\n",label);} 
+                                                                                                ELSE 
+                                                                                                    {printf("LBLL%d\n", $<value>1);} 
+                                                                                                                                        prop 
+                                                                                                                                                {printf("LBL%d\n", $<value>4);}
+                                                                                                                                                                                    ENDIF 
+
+forEnum: STEP NUME DO prop 
+                            {printf("\tvalori %s\n",$<string>-6);
+                             printf("\tvalord %s\n",$<string>-6);
+                             printf("\tmete %d\n",$<value>2);
+                             printf("\tsum\n");
+                             printf("\tasigna\n");
+                             printf("\tvea LBL%d\n", $<value>-3);
+                             printf("LBL%d\n", $<value>0);}
+    | DO prop 
+                {printf("\tvalori %s\n",$<string>-6);
+                 printf("\tvalord %s\n",$<string>-6);
+                 printf("\tmete 1\n");
+                 printf("\tsum\n");
+                 printf("\tasigna\n");
+                 printf("\tvea LBL%d\n", $<value>-3);
+                 printf("LBL%d\n", $<value>0);}
+
 
 lprop: prop SEMICOL lprop 
     |  prop 
