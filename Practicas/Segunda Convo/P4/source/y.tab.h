@@ -94,14 +94,13 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 23 "1.y"
+#line 29 "1.y"
 {
     int value;
     char *string;
-    struct LabelPayload *payload;
 }
 /* Line 1529 of yacc.c.  */
-#line 105 "y.tab.h"
+#line 104 "y.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

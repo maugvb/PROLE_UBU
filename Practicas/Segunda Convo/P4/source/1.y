@@ -1,21 +1,30 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
-
+/**
+ * Clase del parser.
+ *
+ * @author <a href="mailto:mdg1007@alu.ubu.es">Mauricio De Armas Garcia-Valdecasas</a>
+ */
 int yylex();
+/**
+ *   Handler de los errores sintacticos del parser.
+ */
 void yyerror( char *s);
+/**
+*   Archivo de texto.
+*/
 extern FILE *yyin;
-static int labelCount = 0;
-
-
+/**
+*   Contador de labels.
+*/
+int labelCount=0;
+/**
+*   Funcion que retorna la proxima label.
+*/
 int getNewLabel() {
     return labelCount++;
 }
-
-struct LabelPayload {
-    int currentLabel;
-    int endLabel;
-};
 
 %}
 
@@ -23,7 +32,6 @@ struct LabelPayload {
 %union {
     int value;
     char *string;
-    struct LabelPayload *payload;
 }
 
 
@@ -32,7 +40,9 @@ struct LabelPayload {
 %token <string> ID
 %%
 
-
+/**
+* No terminal que identifica la gramatica general. (If, while, for, begin, print, <-).
+*/
 prop: ID 
         {printf("\tvalori %s\n", $<string>1);} 
                                                 ARROW arithexp
@@ -72,14 +82,18 @@ prop: ID
 
     |   PRINT arithexp {printf("\tprint\n");}
     ;
-
+/**
+* No terminal que factoriza las operaciones IF de la gramatica.
+*/
 ifOptional:  
                ELSE {printf("LBL%d\n", $<value>-3);}
                prop {printf("LBL%d\n", $<value>0); }
             ENDIF                                                                                                 
     |     {printf("LBL%d\n", $<value>-3); printf("LBL%d\n", $<value>0);}
            ENDIF 
-
+/**
+* No terminal factoriza las operaciones FOR de la gramatica.
+*/
 forEnum: STEP NUME DO prop 
                             {printf("\tvalori %s\n",$<string>-6);
                              printf("\tvalord %s\n",$<string>-6);
@@ -97,21 +111,30 @@ forEnum: STEP NUME DO prop
                  printf("\tvea LBL%d\n", $<value>-3);
                  printf("LBL%d\n", $<value>0);}
 
-
+/**
+* No terminal que identifica las sentencias con punto y coma.
+*/
 lprop: prop SEMICOL lprop 
     |  prop 
     ;
-
+/**
+*No terminal que identifica las operaciones de Suma y resta.
+*/
 arithexp: arithexp ADD term {printf("\tsum\n");}
    |    arithexp SUB term {printf("\tsub\n");}
    |    term 
    ;
 
+/**
+* No terminal que identifica las operaciones de de multiplicación y división. 
+*/
 term: term MUL fact {printf("\tmul\n");}
     |  term DIV fact {printf("\tdiv\n");}
     | fact
     ;
-
+/**
+* No terminal que identifica los datos finales.
+*/
 fact: ID {printf("\tvalord %s\n", $1);}
     |   NUME { printf("\tmete %d\n", $1); }
     |   PARENTHESIS_START arithexp PARENTHESIS_END
@@ -123,7 +146,9 @@ fact: ID {printf("\tvalord %s\n", $1);}
 
 
 %%
-
+/**
+ *   Handler de los errores sintacticos del parser.
+ */
 void yyerror( char *s) { 
 
 
@@ -135,6 +160,13 @@ void yyerror( char *s) {
     exit(-1);
 
     }
+/**
+*
+*
+*   Funcion Main del programa que lanza yyparse(); 
+*   Se abre el archivo con el texto a parsear y se lanza el parser.
+*
+*/
 int main(int argc, char **argv){ 
     if(argc > 1) {
 		FILE *file = fopen(argv[1], "r");
