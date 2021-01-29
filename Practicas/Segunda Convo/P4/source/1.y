@@ -37,7 +37,9 @@ prop: ID
         {printf("\tvalori %s\n", $<string>1);} 
                                                 ARROW arithexp
                                                                 {printf("\tasigna\n");}
-    |   IF arithexp ifOptional
+    |   IF arithexp {int label = getNewLabel(); 
+             $<value>$=label; 
+             printf("\tsifalsovea LBL%d\n",label);} THEN prop {int label = getNewLabel(); $<value>$=label; printf("\tvea LBL%d\n",label);}  ifOptional
  
                                                                         
                                                                                                         
@@ -69,20 +71,12 @@ prop: ID
     |   PRINT arithexp {printf("\tprint\n");}
     ;
 
-ifOptional: THEN prop { int label = getNewLabel(); 
-                        $<value>$=label; 
-                        printf("\tvea LBL%d\n",label);}  ENDIF {printf("LBL%d\n", $<value>3);} 
-    |      {int label = getNewLabel(); 
-            $<value>$=label; 
-            printf("\tsifalsovea LBL%d\n",label);}
-                                                    THEN prop{  int label = getNewLabel(); 
-                                                                $<value>$=label; 
-                                                                printf("\tvea LBL%d\n",label);} 
-                                                                                                ELSE 
-                                                                                                    {printf("LBLL%d\n", $<value>1);} 
-                                                                                                                                        prop 
-                                                                                                                                                {printf("LBL%d\n", $<value>4);}
-                                                                                                                                                                                    ENDIF 
+ifOptional:  
+               ELSE {printf("LBL%d\n", $<value>-3);}
+               prop {printf("LBL %d\n", $<value>0); }
+            ENDIF                                                                                                 
+    |     {printf("LBL%d\n", $<value>-3); printf("LBL%d\n", $<value>0);}
+           ENDIF 
 
 forEnum: STEP NUME DO prop 
                             {printf("\tvalori %s\n",$<string>-6);
