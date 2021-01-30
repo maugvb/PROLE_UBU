@@ -1,11 +1,16 @@
-// Diagrama de ejemplo
-// -------------------
+// Anotaciones que no tenemos en cuenta como clase
+[note: Anotación sin línea y color {bg:wheat}],[note: Anotación sin línea y sin color {bg:yellow}],
 
 // Clases y sus relaciones
-[Customer] <>- orders*>[Order] ++-0..*> [LineItem]
+[<<abstract>>; Customer] ^-.- [BigCustomer]
+[<<abstract>>; Customer] ^-.- [SimpleCustomer|name;number;id;bank_account]
 
-// Anotación
-[Order] -   [note: An annotation about Order class {bg:wheat}]
+[BigCustomer]<>1-orders 0..*>[Order], 
+[Order]++*-*>[LineItem], [Order]-1>[DeliveryMethod], [Order]*-*>[Product], 
+[Category]<->[Product|-description:string|+getDescription():string;+getID():int;#setID(id:int) ; -computePrice():double]
 
-// Más detalles en la clase: atributos y métodos
-[Customer|+forname: string;+surname: string;-password: string|login(user,pass)]
+// Algunas clases pueden aparecer varias veces pero se debe contar solo una vez.
+[DeliveryMethod] ^ [National | +cif: string]
+[DeliveryMethod] ^  [International|+country: string]
+
+[LineItem|-prod:string; -qty:int|+getProd():string;+getQuantity():int]

@@ -2,11 +2,18 @@
 %{
 #include <stdio.h> 
 #include <string.h>
+/**
+ * Declaraciones del parser
+ *
+ * @author <a href="mailto:mdg1007@alu.ubu.es">Mauricio De Armas Garcia-Valdecasas</a>
+ */
 %}
 
 %{
 
-
+/**
+ * Definiciones de la varibales
+ */
 char classes[50][50], auxClass[50], claseAnterior[50], maxMethod[50], auxMaxMethod[50], classMaxMethod[50], actualClass[50], estereotipoAnterior[50], estereotipos[50][50];
 int attr[50], met[50], par[50], numClasses = 0, numRels = 0, numEster=0, notes=0, numPar=0, numParAux=0, numMet=0, numMetAux=0;
 int auxRep = 0, indexAux =0, mayorAttr, mayorMet;
@@ -21,10 +28,7 @@ REL (">"|"<"|"+"|[0-1]|"-"|"."|" "?"orders"" "?|"^"|"*")+
 
 
 /*Reglas*/
-
-
 %%
-
 
 "//".*  ;
 
@@ -36,12 +40,11 @@ REL (">"|"<"|"+"|[0-1]|"-"|"."|" "?"orders"" "?|"^"|"*")+
 <METHODS>"(" BEGIN(PAR);
 <MEMBERS>"|"    BEGIN(METHODS);
 <CLASS>"<<"   BEGIN(ESTEROTIPOS);
-
-<ESTEROTIPOS>">>;" BEGIN(CLASS); 
+<ESTEROTIPOS>">>;" BEGIN(CLASS);
 <METHODS>"]"   BEGIN(INITIAL);
 <MEMBERS>"]"   BEGIN(INITIAL);
 <CLASS>"]"  BEGIN(INITIAL);
-<PAR>")"   {                    printf(" CLASE EN METODO %s %d", classes[numClasses], numClasses);
+<PAR>")"   {               
 
 
                 if(numPar<numParAux){
@@ -54,7 +57,6 @@ REL (">"|"<"|"+"|[0-1]|"-"|"."|" "?"orders"" "?|"^"|"*")+
                 
             }
 <NOTE>"]" BEGIN(INITIAL);
-
 
 
 
@@ -92,7 +94,6 @@ REL (">"|"<"|"+"|[0-1]|"-"|"."|" "?"orders"" "?|"^"|"*")+
 
 <METHODS>{SPECIAL}?{NAME} {
         numMet++;
-        printf("\n\n METODO: %s \n\n", yytext);
         
         strcpy(auxMaxMethod, yytext);
         
@@ -114,7 +115,6 @@ REL (">"|"<"|"+"|[0-1]|"-"|"."|" "?"orders"" "?|"^"|"*")+
 <PAR>{NAME} {
     
     numParAux++;
-    printf("\n\nUn parametro %s\n\n", yytext);
 }
 
 
@@ -126,7 +126,6 @@ REL (">"|"<"|"+"|[0-1]|"-"|"."|" "?"orders"" "?|"^"|"*")+
                         if(numEster==0){
                                strcpy(estereotipos[numEster], yytext);
                                numEster++;
-                               printf("\n\n Esta clase se ha añadido correctamente: %s \n\n", yytext);
 
                             }else{
                                 for(int i=0; i<numEster;i++){
@@ -138,14 +137,13 @@ REL (">"|"<"|"+"|[0-1]|"-"|"."|" "?"orders"" "?|"^"|"*")+
                                 if(auxRep==0){
                                     strcpy(estereotipos[numEster], yytext);
                                     numEster++;
-                                    printf(" Esta clase se ha añadido correctamente: %s \n\n", yytext);
 
                                 }else{
                                     auxRep=0;
-                                    printf(" Clase repetida ERROR al añadir %s \n\n", yytext);
                                 }
                             }
 }
+
 <CLASS>{NAME} {
 
                         strcpy(claseAnterior,yytext);
@@ -153,7 +151,6 @@ REL (">"|"<"|"+"|[0-1]|"-"|"."|" "?"orders"" "?|"^"|"*")+
                         if(numClasses==0){
                                strcpy(classes[numClasses], yytext);
                                numClasses++;
-                               printf("\n\n Esta clase se ha añadido correctamente: %s \n\n", yytext);
 
                             }else{
                                 for(int i=0; i<numClasses;i++){
@@ -165,11 +162,9 @@ REL (">"|"<"|"+"|[0-1]|"-"|"."|" "?"orders"" "?|"^"|"*")+
                                 if(auxRep==0){
                                     strcpy(classes[numClasses], yytext);
                                     numClasses++;
-                                    printf(" Esta clase se ha añadido correctamente: %s \n\n", yytext);
 
                                 }else{
                                     auxRep=0;
-                                    printf(" Clase repetida ERROR al añadir %s \n\n", yytext);
                                 }
                             }
                                             
@@ -181,21 +176,27 @@ REL (">"|"<"|"+"|[0-1]|"-"|"."|" "?"orders"" "?|"^"|"*")+
 
 " "?{REL}" "?    {
                         numRels++;
-                        printf("\n\n Se ha añadido una relacion correctamente \n\n");
                     }
-
+<NOTE>. ;
+<METHODS>.  ;
+<CLASS>.    ;
+<ESTEROTIPOS>.  ;
+<PAR>.   ;
+<MEMBERS>.  ;
 .                   ;
 %%
 /*Codigo de usuario*/
-
-int main(){
-
+/*Main que llama al parser.*/
+int main(int argc, char **argv){
+    if(argc > 1) {
+		FILE *file = fopen(argv[1], "r");
+		if(!file) {
+			fprintf(stderr, "no se puede abrir %s\n", argv[1]);
+			exit(1);
+		}
+		yyin = file;
+	}
     yylex();
-
-    for(int i=0; i<numClasses; i++){
-
-        printf("\nClase: %s \n", classes[i]);
-    }
 
     printf("El número de clases es %d y con estereotipo %i. \n", numClasses, numEster);
     printf("El número de relaciones es %d. \n", numRels);
