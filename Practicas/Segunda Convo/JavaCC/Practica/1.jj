@@ -8,10 +8,9 @@ import java.util.ArrayList;
 
 public class practica{
     /*
-     * A test
+     * funcion Main que llama tiene el archivo como argumento.
      */
     public static void main(String args[]) throws java.io.FileNotFoundException {
-    
         practicaTokenManager tkmngr;
             if ( args.length < 1 ) {
            tkmngr = new practicaTokenManager( new SimpleCharStream(System.in) );
@@ -34,10 +33,11 @@ public class practica{
             System.out.println("Exiting.");
             throw x;
         };
-    
+        
+        /**Outputs. */
         System.out.println("\n\n\nNúmero de clases es "+tkmngr.clasesCNT+", con estereotipos "+ tkmngr.stereotypeNum);
         System.out.println("\nNúmero de relaciones es: "+tkmngr.numRel);
-        System.out.println("\nLa clase con el mayor número de atributos es "+tkmngr.maxClassMem+ ", con "+tkmngr.maxNumMem+" atributos.");
+        System.out.println("\nLa clase con el mayor número de atributos es '"+tkmngr.maxClassMem+ "', con "+tkmngr.maxNumMem+" atributos.");
         System.out.println("\nEl método con mas argumentos es '"+tkmngr.methMaxAtr+"' de la clase '"+tkmngr.maxAtrClass+"'");
         System.out.println("\nEl número de notas es "+tkmngr.notes);
 
@@ -65,6 +65,10 @@ TOKEN_MGR_DECLS : {
     static ArrayList<String> stereotype = new ArrayList<String>();
     static String tmpClassName, maxClassMem, auxMaxClassMem, tmpStereotypeName, maxAtrClass, methMaxAtr, auxMethodId;
 }
+
+/**
+ * Definiciones
+ * */ 
 <*>TOKEN:{ 
     <#ID: (["A"-"Z","a"-"z"])+>
 |   <#STRING: (<CHARAC>|<NUM>|(" "|"."|"+"|"*"|"_"|"-"))+> 
@@ -80,25 +84,24 @@ TOKEN_MGR_DECLS : {
 |   <#SPECIAL: "+"|"-"|(":"" ")?|"_">
 |   <#IDFULL: (["A"-"Z","a"-"z","0"-"9"])+>
 }
-
+/**
+ * General Tokens call
+ */
 TOKEN:{
-    /* <COM: "//">:COMENT*/
     <OPEN: "["> {  } : CLASS
 |    <NOTE_START: "[note:"> { notes++;} :NOTE
-|    <REL: (<ARROW>|"^")> {
-                    System.out.println("\n\n Relacion: "+image.toString()+"\n\n");
-
-                    numRel++;}
+|    <REL: (<ARROW>|"^")> {numRel++;}
 }
-/*
-<COMENT>TOKEN: {
-    <EOL_COMENT: "\n">:DEFAULT
-}*/
+/**
+ * Note Token
+ */
 <NOTE>TOKEN : {
         <CLOSE_NOTE: "]"> {  } : DEFAULT
  
 }
-
+/**
+ * Class Token
+ */
 <CLASS>TOKEN : {
     <ID_CLASS: (<ID>)> {            auxMaxClassMem = image.toString();
                                     tmpClassName = image.toString();
@@ -106,7 +109,6 @@ TOKEN:{
                                     if(clases.size() == 0){
                                         clases.add(image.toString());
                                         clasesCNT++;
-                                        System.out.println(image.toString());
                                     }else{
                                         for(int i =0; i<clases.size();i++){
                                             if(clases.get(i).equals(image.toString())){
@@ -116,7 +118,6 @@ TOKEN:{
                                         if(aux==0){
                                             clases.add(image.toString());
                                             clasesCNT++;
-                                            System.out.println(image);
                                         }
                                     }
                                   
@@ -126,7 +127,9 @@ TOKEN:{
 |   <CLOSE_CLASS: "]"> {tmpNumMem=0;} : DEFAULT
 
 }
-
+/**
+ * Stereotype Token
+ */
 <STEREOTYPE>TOKEN:{
     <ID_STEREOTYPE: (<ID>)>  {  tmpStereotypeName = image.toString();
                                 int auxSt = 0;
@@ -150,9 +153,11 @@ TOKEN:{
 |   <CLOSE_STEREOTYPE: ">>">    { }: CLASS
 
 }
-
+/**
+ * Members Token
+ */
 <MEMBERS>TOKEN: {
-    <ID_MEMBER: (<STRING>)(": ")?(<STRING>)?(";")?>   {tmpNumMem++; System.out.println("\n\nID MEMBER\n\n"+image+"Numero"+tmpNumMem + "Clase "+ auxMaxClassMem);}
+    <ID_MEMBER: (<STRING>)(": ")?(<STRING>)?(";")?>   {tmpNumMem++;}
 |    <BARRA_MEMBERS: "|"> { if(tmpNumMem>maxNumMem){
                                 maxNumMem=tmpNumMem;
                                 maxClassMem = auxMaxClassMem;
@@ -173,9 +178,12 @@ TOKEN:{
                         } : DEFAULT
 
 }
+
+/**
+ * Methodas Token
+ */
 <METHODS>TOKEN: {
-    <ID_METHOD: (<SPECIAL>)?(<IDFULL>)> {auxMethodId=image.toString();
-                                            System.out.println("NUEVO ATRIBUTO ' "+image+" '");}
+    <ID_METHOD: (<SPECIAL>)?(<IDFULL>)> {auxMethodId=image.toString();}
 |   <OPEN_METHODS: "("> {  } : PAR
 |   <NEW_METHOD: ";"> {
     if(numAtr<auxNumAtr){
@@ -204,12 +212,16 @@ TOKEN:{
  } : DEFAULT
 
 }
-
+/**
+ * Par Token
+ */
 <PAR>TOKEN: {
      <OPEN_PAR: ")"> {  } : METHODS
 |    <PAR_TOKEN: (<STRING>|" "|":")> { auxNumAtr++; }
 }
-
+/**
+ * Skip Chars.
+ */
 <*>SKIP:
 {
     <"/*"(~[])*"*/">
